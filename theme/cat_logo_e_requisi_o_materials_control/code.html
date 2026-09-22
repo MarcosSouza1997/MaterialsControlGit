@@ -1,0 +1,541 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary":"#ffffff","surface-container":"#d9f2fd","on-error-container":"#93000a","on-primary-fixed":"#001e2b","error-container":"#ffdad6","surface-bright":"#f3fbff","on-surface":"#061e26","inverse-surface":"#1d333c","on-primary-container":"#fdfdff","surface-container-highest":"#cee6f2","tertiary":"#00638a","tertiary-container":"#007dae","secondary-container":"#acd2ff","on-background":"#061e26","primary-fixed":"#c2e8ff","tertiary-fixed":"#c6e7ff","primary":"#006485","on-surface-variant":"#3f484e","on-tertiary-container":"#fdfdff","primary-container":"#007ea7","surface-dim":"#c6dee9","on-secondary-fixed-variant":"#20496f","secondary-fixed":"#d0e4ff","secondary-fixed-dim":"#a4caf7","on-primary-fixed-variant":"#004d67","inverse-on-surface":"#def4ff","on-tertiary-fixed-variant":"#004c6b","on-error":"#ffffff","inverse-primary":"#78d1fe","secondary":"#3a6188","surface-container-low":"#e5f6ff","tertiary-fixed-dim":"#83cfff","outline-variant":"#bec8cf","surface-tint":"#006688","surface":"#f3fbff","on-secondary-container":"#335a82","surface-container-high":"#d4ecf7","on-tertiary-fixed":"#001e2d","surface-variant":"#cee6f2","on-secondary-fixed":"#001d35","outline":"#6f787f","primary-fixed-dim":"#78d1fe","error":"#ba1a1a","on-tertiary":"#ffffff","background":"#f3fbff","surface-container-lowest":"#ffffff","on-primary":"#ffffff"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-md":"0.75rem","margin":"1.5rem","gutter-lg":"1.5rem","space-xs":"0.25rem","space-xl":"1.5rem","space-lg":"1rem","space-2xl":"2rem","margin-mobile":"1rem","space-2xs":"0.125rem","gutter":"1rem","space-sm":"0.5rem"},fontFamily:{"headline-sm":["Inter"],"headline-md":["Inter"],"label-sm":["Inter"],"display-lg":["Inter"],"code-sm":["Inter"],"label-md":["Inter"],"body-lg":["Inter"],"body-md":["Inter"],"headline-lg":["Inter"],"body-sm":["Inter"]},fontSize:{"headline-sm":["16px",{lineHeight:"24px",letterSpacing:"0em",fontWeight:"600"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"700"}],"display-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"code-sm":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"500"}],"label-md":["13px",{lineHeight:"18px",letterSpacing:"0.01em",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"24px",letterSpacing:"0em",fontWeight:"400"}],"body-md":["14px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"700"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0.01em",fontWeight:"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-64 bg-on-background z-50 flex flex-col justify-between select-none shadow-[0_1px_8px_rgba(0,0,0,0.15)]"><div class="flex flex-col"><div class="h-20 px-space-lg flex items-center gap-space-sm bg-on-background"><img alt="Materials Control Logo" class="h-12 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHdCAxCBeG1vixLw3BNZol0I6IJ5FnvBGCM3BKlEz9fbCOrLsAxGYVueC_F38zgnaPg7ub9kGmuXR5rb2Mqn--EihEKBmSB50_misRqh-N9MwhptxGOb2ytam_vIGg_pZC_zagAzPgqEd8iTv5wOBP05HIpt_-7xStDIM2awzd2nuYmRUMqp0L1qlpUiN_J1Zelzarc1qOYJuNzat85vSErIA5oEIYGHU1tGF9vvLkUry2MGcxvKfpi6G7iMIfNA0x8c3VbBFcW8j_ftQ"><div class="flex flex-col"><span class="text-surface font-headline-sm tracking-tight">Materials</span><span class="text-primary-fixed text-label-sm uppercase tracking-widest font-label-sm">Control IT</span></div></div><div class="px-space-md py-space-sm"><div class="px-space-sm py-space-xs text-label-sm text-outline uppercase tracking-wider font-label-sm">Operação &amp; Estoque</div></div><nav class="flex flex-col gap-1 px-space-md" data-active-classes="bg-primary text-on-primary font-semibold shadow-sm"><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-outline-variant hover:bg-inverse-surface hover:text-surface transition-all font-body-md" data-path="dashboard-geral" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="">Dashboard Geral</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-outline-variant hover:bg-inverse-surface hover:text-surface transition-all font-body-md" data-path="catalogo-requisicoes" href="#"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="">Catálogo &amp; Requisições</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-lg text-outline-variant hover:bg-inverse-surface hover:text-surface transition-all font-body-md" data-path="central-aprovacoes" href="#"><div class="flex items-center gap-space-md"><span class="material-symbols-outlined text-[20px]">verified_user</span><span class="">Central de Aprovações</span></div><span class="bg-error-container text-on-error-container text-label-sm font-label-sm px-1.5 py-0.5 rounded-full">7</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-outline-variant hover:bg-inverse-surface hover:text-surface transition-all font-body-md" data-path="controle-estoque" href="#"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span class="">Controle de Estoque</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-outline-variant hover:bg-inverse-surface hover:text-surface transition-all font-body-md" data-path="relatorios-auditoria" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span class="">Relatórios &amp; Auditoria</span></a><a class="flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-outline-variant hover:bg-inverse-surface hover:text-surface transition-all font-body-md" data-path="configuracoes" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="">Configurações</span></a></nav></div><div class="p-space-md"><div class="bg-inverse-surface rounded-xl p-space-md flex flex-col gap-space-xs"><div class="flex items-center gap-space-sm text-secondary-fixed"><span class="material-symbols-outlined text-[18px]">warehouse</span><span class="font-label-md text-label-md">Almoxarifado TI</span></div><span class="text-outline-variant font-body-sm text-body-sm">Sede Matriz • Setor B</span><div class="flex items-center justify-between pt-space-xs"><span class="inline-flex items-center gap-1.5 font-label-sm text-label-sm text-surface"><span class="w-2 h-2 rounded-full bg-primary-fixed"></span>Conectado</span><span class="font-code-sm text-code-sm text-outline-variant">v2.4.0</span></div></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40"><div class="w-full h-full px-gutter-lg flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-lg flex-1"><div class="hidden lg:flex items-center gap-space-xs font-body-sm text-on-surface-variant"><span class="material-symbols-outlined text-[16px]">home</span><span class="">/</span><span class="text-on-surface font-label-md font-medium">Materiais e Suprimentos</span></div><div class="relative flex-1 max-w-md"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full h-10 pl-9 pr-space-md bg-surface-container-low text-on-surface placeholder:text-outline font-body-sm rounded-lg outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Buscar por item, SKU, patrimônio ou solicitante..." type="text"></div></div><div class="flex items-center gap-space-lg"><div class="hidden sm:flex items-center gap-space-sm px-space-md py-1.5 rounded-full bg-surface-container text-on-surface"><span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span><span class="font-label-sm text-label-sm">Almoxarifado Central (TI)</span></div><button aria-label="Notificações" class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-error ring-2 ring-surface-container-lowest"></span></button><div class="h-6 w-px bg-surface-container-high"></div><div class="flex items-center gap-space-md"><div class="flex flex-col text-right hidden md:flex"><span class="font-label-md text-label-md text-on-surface">Carlos Mendes</span><span class="font-body-sm text-body-sm text-on-surface-variant">Analista de TI / Gestor</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen px-gutter-lg py-margin"><div class="flex flex-col w-full gap-space-xl">
+<!-- Cabeçalho Institucional & Contexto Operacional -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-lowest p-space-xl rounded-xl shadow-sm">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs text-primary font-label-sm uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span class="">Módulo de Autoatendimento do Colaborador</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Catálogo de Insumos e Materiais de TI</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Selecione os itens necessários para as atividades da sua estação de trabalho e registre a justificativa operacional.</p>
+</div>
+<!-- Indicador de Status do Almoxarifado -->
+<div class="flex items-center gap-space-lg self-start lg:self-center bg-surface-container-low px-space-lg py-space-sm rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Almoxarifado Ativo</span>
+<span class="font-label-md text-label-md text-primary font-semibold">Central Matriz (Setor B)</span>
+</div>
+<div class="h-8 w-px bg-surface-container-highest"></div>
+<div class="flex items-center gap-space-xs text-secondary font-label-sm text-label-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="">Estoque Sincronizado</span>
+</div>
+</div>
+</div>
+<!-- Barra de Busca Avançada & Filtros Rápidos -->
+<div class="flex flex-col gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-col md:flex-row items-center gap-space-md">
+<div class="relative flex-1 w-full">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full h-11 pl-11 pr-space-md bg-surface-container-low text-on-surface placeholder:text-outline font-body-md text-body-md rounded-lg outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container/30 transition-all" id="catalog-search" placeholder="Buscar por nome, SKU, modelo ou fabricante (ex: Dell, Logitech, CF258A)..." type="text">
+</div>
+<div class="flex items-center gap-space-sm w-full md:w-auto shrink-0">
+<button class="h-11 px-space-lg flex items-center justify-center gap-space-xs bg-surface-container-high hover:bg-surface-container text-on-surface rounded-lg font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Filtros Avançados</span>
+</button>
+<button class="h-11 px-space-lg flex items-center justify-center gap-space-xs bg-surface-container-high hover:bg-surface-container text-on-surface rounded-lg font-label-md text-label-md transition-colors">
+<span class="material-symbols-outlined text-[18px]">swap_vert</span>
+<span class="">Mais Requisitados</span>
+</button>
+</div>
+</div>
+<!-- Chips de Navegação de Categorias -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 scrollbar-none">
+<button class="px-space-md py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-primary text-on-primary transition-all shadow-sm">
+        Todos os Materiais
+      </button>
+<button class="px-space-md py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">
+        Mouses &amp; Apontadores
+      </button>
+<button class="px-space-md py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">
+        Teclados &amp; Acessórios
+      </button>
+<button class="px-space-md py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">
+        Toners &amp; Cartuchos
+      </button>
+<button class="px-space-md py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">
+        Cabos &amp; Adaptadores
+      </button>
+<button class="px-space-md py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">
+        Resmas &amp; Papelaria Corporativa
+      </button>
+<button class="px-space-md py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-all">
+        Fones &amp; Headsets
+      </button>
+</div>
+</div>
+<!-- Layout Principal em Duas Colunas: Catálogo + Painel Lateral Fixo de Requisição -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-start">
+<!-- COLUNA ESQUERDA: Grade de Produtos no Catálogo (8 Colunas) -->
+<div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface">Itens Disponíveis para Solicitação</span>
+<span class="px-2 py-0.5 bg-surface-container-high text-primary font-label-sm text-label-sm rounded-full">8 itens encontrados</span>
+</div>
+<span class="text-outline font-body-sm text-body-sm hidden sm:inline">Exibindo almoxarifado local</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter-lg">
+<!-- CARD 1: Mouse Óptico USB Dell MS116 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Modern corporate black Dell optical USB computer mouse placed cleanly on an office tech desk with soft diffuse ambient corporate lighting, blue tinted shadows, minimal and executive style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZckbTecy8JwFtK7fJZ7ICasmXihh4fjeLOeFWWeWu--Ke2TOtZcHMuaEv9Pqi7elG1wVKHeBLRiZ2GvLhGquAHC4M-p2BOC4oRMoB2732h6TB09q208VWmnTqo0y-zCXxR-TWdZ52Ls7IMYKZDzw6jERkPb_t-UZLwMzuqb2nU22H0HHyhJmx51Me-bdoABcLOfclHs2uQZGrP5TMHR0yqnMXsoGstZlJoyE9i6Zo07u0-n94YcM">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: DEL-MS116
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Periféricos
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Mouse Óptico USB Dell MS116</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Resolução 1000 DPI, conexão plug &amp; play cabeada USB-A, acabamento ergonômico padrão corporativo.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                42 unidades
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+<!-- CARD 2: Teclado Mecânico Silencioso ABNT2 Logitech K120 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Professional office Logitech ABNT2 USB keyboard on a sleek white and cyan workspace desktop, clean studio enterprise lighting, top-down isometric angle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfpeXne1xvGyGDPmAXdwbIvsdmf2Ax1QhH-3-VoIJmJej0DZDrP7DZ23FERyPFXrwQUWCDW0QshjWvLR4nvINR2wc36e66BfWbiKRVyfE9tlJrZH_cOyy--ojmFrN09APHataq2ylTZOO3DG2H371n5atI3oWMYef_aK1BemH_MnJqR2Pb1bljSO8lV52BMsC8uQdnm5Sbq_ojAC2ksPEI53Dwjku7VT1Agc56NKrBCLfYzuJrxjg">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: LOG-K120
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Periféricos
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Teclado ABNT2 Logitech K120</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Layout brasileiro padrão ABNT2 com Ç, teclas de perfil baixo ultra silenciosas e suporte inclinável.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                28 unidades
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+<!-- CARD 3: Toner HP LaserJet CF258A 58A Preto Original -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Original HP LaserJet printer toner cartridge CF258A with official security seal packaging on warehouse storage shelf, crisp industrial lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4S0tVOkikGOL3MLMGsSItMSgM65IHSW7X0GxbeeLzY_fEg7rsn0hzfOD418wgZbau7Vxcbxvk4op5rNbrC2trv-UdZaGj6mOMzN5bbpUriVNUpKHN_5HQNoJ-AAA5SetZ0SIZ__MRN542LAdHg5k8GtzoFhCZGW2oSal5hB1mguG67Magrd7hJ8Rqs-UzWBIR0gTxk43wKe7I_7pU7G6ZtNxmiTWYzi_XUvMk3_QymeP3LM_Uy5o">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: TON-CF258A
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Impressão
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Toner HP LaserJet CF258A Preto</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Cartucho original preto de alto rendimento médio de 3.000 páginas para impressoras corporativas M404 / M428.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                14 unidades
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+<!-- CARD 4: Resma de Papel Sulfite Chamex A4 75g -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Pack of Chamex white A4 copy paper ream on an organized corporate supply room shelf, neat high-contrast clean office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB66P0YS9WJBY-QG7db9uuQbrlwxp1C2LcFQ3ALFc5mnCrbKcLOtXI6EKZtS1hUrjDaIDbiiMgxsLzO86-GoZCa2d2tEge7pLp6UqiWR_mABMwS9pTVBFNuNOwWraBhzDND_k4nmiuo7Z5cta0DNQyHGR5xzGNaAQ97SyNeQot07kWELdY2vadTE4_uG0RIzeTKY-r2etZrQgIdtoN9YhH_EZLiwRoA4uw5tTtfePfOGxvLwWXbFgU">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: PAP-A4-75G
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Papelaria
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Resma Papel Sulfite Chamex A4</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Gramatura 75g/m², pacote selado com 500 folhas brancas para impressão e arquivo de documentação interna.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                120 pacotes
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+<!-- CARD 5: Headset USB Plantronics com Cancelamento -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Enterprise grade Plantronics wired USB headset with noise canceling microphone on a modern conference room station table, premium corporate design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZLic8kt211t78dxAraiUnLzQEhxszm2lfshQau0kemxF9fgdN56a_txJ160Kbao0324gf-uZ2eqZMestq-iZafklmjqm92l4-_MjMTLlmEBc5CqF6BdQ1gHYyeaAN8HeQ-Jhjv1-4kUIA7lVoBTOmAni4ifcyuVWe1rW8GZ_8YRjsQNOxPHo4Oh3bnl9pG6ZtvvqqsNjmCSsU0KIcBDWuAumDByVWo4BhA16gWvZn5IwjNf4NjUQ">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: AUD-PLT-C3220
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Áudio &amp; Voz
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Headset USB Plantronics Blackwire</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Microfone flexível antirruído, conector USB-A com controle no cabo, homologado para chamadas e reuniões.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                19 unidades
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+<!-- CARD 6: Adaptador HDMI para VGA com Saída de Áudio -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Compact black HDMI to VGA digital video adapter cable accessory resting neatly on a clean gray enterprise IT workbench surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkyCtXznyuGw2QZ6aZpBu3SY06_8C9xdFr6SfioCKJJOdnt4WY9le9W5IGqUU_-y4n4B4si5MPtDzSle5lWCSBLxYwm4yDIV2WhBy_9y6iNq4EItwaIcdKUhKJaE6eRogJ276BXKTiRcGAYPozHMAEqzVvmEPkqVVKva1l3x-9wxDKazfa05ztQmANb844KlTqmOh_1CnHdnsgY4EMs745-oZbEM9DINaL4mCRj9rUbtapfYhpmlQ">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: CAB-AD-HDVGA
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Conectividade
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Adaptador HDMI para VGA c/ Áudio</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Conversor com suporte a Full HD 1080p e conexão auxiliar P2 3.5mm para monitores e projetores legados.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                8 unidades
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+<!-- CARD 7: Mouse sem Fio Ergonômico Logitech M170 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Compact wireless Logitech M170 mouse with USB nano receiver next to a business laptop on a clean corporate desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXxg_7Gc-OGVOsYfK3IbnS-jhYV9EkZqlxmfXQbM3IxJe6Zc8x6xJguzv0lYveLOr2XQ3dhqTcaAjNzfL8Aeh1XIPtJs8rUxyb3LrC5WzfmiBqce9gMTHfDIpu_p4MDxK5pLyXOjq3QTH_RfS7Th1Ssgbrn22kF6Ps73dyqSj1_I0CLVcgGetnNNhEpB6cV96smioKflR-AwEdrdMIrN0Fx7ZLL5jxUBFQP0OauyYcVOub3TRM7so">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: LOG-M170-WL
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Periféricos
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Mouse sem Fio Logitech M170</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Tecnologia sem fio de 2.4 GHz com nano receptor USB, autonomia de bateria de até 12 meses.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                15 unidades
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+<!-- CARD 8: Filtro de Linha 5 Tomadas Bivolt Clamper -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
+<div class="flex flex-col gap-space-md">
+<div class="relative w-full h-40 rounded-lg overflow-hidden bg-surface-container-low flex items-center justify-center">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Heavy duty Clamper multi outlet power strip surge protector for server and office IT workstation setups" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS6UuhcqccTAJDLNnO55Aptz8LRCcczSeal3HXrLJfaCiDDIBJo7AuViRsHuxwrquX1zfwNSsP2ree8xokszLrffPR_fvIUiLHZVu3wflRyzUev9l70RXPwpEkMpy9aRXwPlqoAHB-ZUhohUm2GaSNUxX6dA147agFbEo9-S2ctas3c18Xhk-vrH668U6jw6Oq_ak1FEVcp7vJ2ljD5pW56842k3NlGVP32cfGO_ZbaA7UGNFweDY">
+<span class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-code-sm text-code-sm px-2 py-0.5 rounded shadow-sm">
+                SKU: ELE-CLMP-5T
+              </span>
+<span class="absolute top-2.5 right-2.5 bg-surface-container-lowest/95 backdrop-blur-sm text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Elétrica &amp; TI
+              </span>
+</div>
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Filtro de Linha 5 Tomadas Clamper</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Protetor de surto elétrico bivolt com chave microdisjuntora de rearme manual e cabo reforçado de 1.5m.</p>
+</div>
+</div>
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-xs rounded-lg">
+<span class="font-label-sm text-label-sm text-outline">Estoque Disponível</span>
+<span class="font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">inventory</span>
+                31 unidades
+              </span>
+</div>
+<button class="w-full h-10 bg-primary-container hover:bg-primary text-on-primary-container font-label-md text-label-md rounded-lg flex items-center justify-center gap-space-xs transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Adicionar à Requisição</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- COLUNA DIREITA: Painel Fixo de Requisição em Andamento (4-5 Colunas) -->
+<div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-space-lg lg:sticky lg:top-20">
+<div class="bg-surface-container-lowest rounded-xl shadow-md p-space-xl flex flex-col gap-space-lg">
+<!-- Cabeçalho do Carrinho de Requisições -->
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Sua Requisição Atual</h2>
+<span class="font-body-sm text-body-sm text-on-surface-variant">3 itens adicionados</span>
+</div>
+</div>
+<button class="text-error hover:bg-error-container/30 px-space-sm py-1 rounded font-label-sm text-label-sm transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">delete_sweep</span>
+<span class="">Limpar</span>
+</button>
+</div>
+<!-- Lista dos Itens Selecionados com Quantidade (+ / -) -->
+<div class="flex flex-col gap-space-sm">
+<!-- Item 1: Mouse Óptico USB Dell MS116 -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Mouse Óptico USB Dell MS116</span>
+<span class="font-code-sm text-code-sm text-outline">SKU: DEL-MS116 • Periférico</span>
+</div>
+<button class="text-outline hover:text-error transition-colors p-1" title="Remover item">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Qtd. Solicitada:</span>
+<div class="flex items-center bg-surface-container-lowest rounded-md shadow-sm">
+<button class="w-7 h-7 flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">remove</span>
+</button>
+<span class="w-8 text-center font-label-md text-label-md text-on-surface font-semibold">1</span>
+<button class="w-7 h-7 flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2: Resma de Papel Sulfite A4 75g -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Resma de Papel Sulfite A4 75g</span>
+<span class="font-code-sm text-code-sm text-outline">SKU: PAP-A4-75G • 500 Fls</span>
+</div>
+<button class="text-outline hover:text-error transition-colors p-1" title="Remover item">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Qtd. Solicitada:</span>
+<div class="flex items-center bg-surface-container-lowest rounded-md shadow-sm">
+<button class="w-7 h-7 flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">remove</span>
+</button>
+<span class="w-8 text-center font-label-md text-label-md text-on-surface font-semibold">2</span>
+<button class="w-7 h-7 flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 3: Cabo de Rede Patch Cord Cat6 2m -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Cabo de Rede Patch Cord Cat6 2m</span>
+<span class="font-code-sm text-code-sm text-outline">SKU: CAB-CAT6-02 • Azul RJ45</span>
+</div>
+<button class="text-outline hover:text-error transition-colors p-1" title="Remover item">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Qtd. Solicitada:</span>
+<div class="flex items-center bg-surface-container-lowest rounded-md shadow-sm">
+<button class="w-7 h-7 flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">remove</span>
+</button>
+<span class="w-8 text-center font-label-md text-label-md text-on-surface font-semibold">1</span>
+<button class="w-7 h-7 flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- ALERTA VISUAL ANTI-DUPLICAÇÃO CRÍTICO -->
+<div class="rounded-xl p-space-lg bg-primary-fixed flex flex-col gap-space-sm shadow-sm relative overflow-hidden">
+<div class="flex items-center gap-space-sm text-on-primary-fixed">
+<span class="material-symbols-outlined text-[24px] text-primary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-headline-sm text-headline-sm font-bold">Atenção: Alerta Preventivo de Duplicidade</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-primary-fixed-variant leading-relaxed">
+            Identificamos que você solicitou um <strong>"Mouse Óptico USB Dell"</strong> há <strong>38 dias</strong> (em 14/09/2024). Conforme a política corporativa de TI, a vida útil esperada de periféricos é de no mínimo <strong>180 dias</strong>.
+          </p>
+<div class="bg-surface-container-lowest/80 p-space-sm rounded-lg font-body-sm text-body-sm text-on-primary-fixed">
+            É obrigatório detalhar abaixo o motivo da substituição prematura (ex.: defeito comprovado com chamado, dano acidental ou realocação).
+          </div>
+</div>
+<!-- Formulário de Justificativa e Centro de Custo -->
+<div class="flex flex-col gap-space-md">
+<!-- Seletor de Centro de Custo -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface flex items-center justify-between">
+<span class="">Centro de Custo / Departamento *</span>
+<span class="font-code-sm text-code-sm text-primary">Cód. Autodeclarado</span>
+</label>
+<div class="relative">
+<select class="w-full h-11 px-space-md pr-10 bg-surface-container-low text-on-surface font-body-md text-body-md rounded-lg outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/30 transition-all appearance-none cursor-pointer">
+<option selected="" value="4020">Tecnologia da Informação - 4020</option>
+<option value="1010">Operações e Logística - 1010</option>
+<option value="2030">Controladoria e Finanças - 2030</option>
+<option value="3045">Recursos Humanos &amp; DP - 3045</option>
+<option value="5012">Comercial &amp; Contratos - 5012</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Campo de Justificativa com Contador de Caracteres -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface" for="requisition-justification">
+                Justificativa da Necessidade *
+              </label>
+<span class="font-code-sm text-code-sm text-outline" id="char-counter">171/500</span>
+</div>
+<textarea class="w-full p-space-md bg-surface-container-low text-on-surface placeholder:text-outline font-body-md text-body-md rounded-lg outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/30 transition-all resize-none" id="requisition-justification" maxlength="500" placeholder="Descreva a necessidade do insumo e informe o número do chamado de TI ou motivo de troca prematura caso aplicável..." rows="4">O botão esquerdo do mouse anterior começou a falhar cliques duplos durante operações no ERP. O equipamento foi testado e laudado pelo suporte N1 conforme chamado #TI-4482.</textarea>
+</div>
+<!-- Resumo da Política de Aprovação -->
+<div class="flex items-center gap-space-xs text-outline font-body-sm text-body-sm bg-surface-container-low p-space-sm rounded-lg">
+<span class="material-symbols-outlined text-[16px] text-tertiary">info</span>
+<span class="">Aprovação direta pelo gestor imediato em até 4h úteis.</span>
+</div>
+<!-- Botão Principal em Destaque Vibrante -->
+<button class="w-full h-12 bg-inverse-primary hover:bg-primary text-on-surface hover:text-on-primary font-headline-sm text-headline-sm rounded-lg flex items-center justify-center gap-space-sm transition-all shadow-md active:scale-[0.99]" id="btn-submit-requisition">
+<span class="material-symbols-outlined text-[20px]">send</span>
+<span class="">Enviar Requisição</span>
+</button>
+<!-- Ação Secundária: Salvar Rascunho -->
+<button class="w-full py-2 bg-transparent hover:bg-surface-container-low text-primary font-label-md text-label-md rounded-lg transition-colors flex items-center justify-center gap-space-xs">
+<span class="material-symbols-outlined text-[16px]">bookmark_border</span>
+<span class="">Salvar como Rascunho</span>
+</button>
+</div>
+</div>
+<!-- Resumo Rápido da Conta do Colaborador -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-label-md">
+            CM
+          </div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Carlos Mendes</span>
+<span class="font-body-sm text-body-sm text-outline">Matrícula: TI-88392</span>
+</div>
+</div>
+<span class="px-2.5 py-1 bg-surface-container text-primary font-label-sm text-label-sm rounded-full">Nível 2</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Atualização dinâmica do contador de caracteres
+  const textarea = document.getElementById('requisition-justification');
+  const counter = document.getElementById('char-counter');
+
+  if (textarea && counter) {
+    const updateCount = () => {
+      counter.textContent = `${textarea.value.length}/500`;
+    };
+    textarea.addEventListener('input', updateCount);
+    updateCount();
+  }
+
+  // Microinteração simulada de envio
+  const submitBtn = document.getElementById('btn-submit-requisition');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      const originalHtml = submitBtn.innerHTML;
+      submitBtn.innerHTML = `
+        <span class="material-symbols-outlined text-[20px] animate-spin">sync</span>
+        <span>Processando Requisição...</span>
+      `;
+      submitBtn.disabled = true;
+      setTimeout(() => {
+        submitBtn.innerHTML = `
+          <span class="material-symbols-outlined text-[20px]">check_circle</span>
+          <span>Requisição Enviada com Sucesso!</span>
+        `;
+        submitBtn.classList.remove('bg-inverse-primary', 'hover:bg-primary', 'text-on-surface');
+        submitBtn.classList.add('bg-primary', 'text-on-primary');
+        setTimeout(() => {
+          submitBtn.innerHTML = originalHtml;
+          submitBtn.classList.remove('bg-primary', 'text-on-primary');
+          submitBtn.classList.add('bg-inverse-primary', 'text-on-surface');
+          submitBtn.disabled = false;
+        }, 3000);
+      }, 1200);
+    });
+  }
+</script></main></div>
+
+</body></html>
