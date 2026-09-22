@@ -1,0 +1,59 @@
+/* css/tokens.css — Materials Control v1.0 Design Tokens */
+:root {
+  /* Paleta Oficial */
+  --color-brand-black: #00171F;       /* Azul Quase Preto */
+  --color-brand-dark: #003459;        /* Azul Escuro Profundo */
+  --color-brand-primary: #007EA7;     /* Azul Médio Oceano */
+  --color-brand-accent: #00A8E8;      /* Azul Claro Vibrante */
+  --color-brand-white: #FFFFFF;       /* Branco Puro */
+
+  /* Cores Semânticas de Interface */
+  --color-bg-main: #F4F7F9;
+  --color-surface: #FFFFFF;
+  --color-surface-dim: #C6DEE9;
+  --color-border-subtle: #E2E8F0;
+  --color-border-primary: #003459;
+  --color-text-main: #00171F;
+  --color-text-muted: #3F484E;
+
+  /* Cores Semânticas de Feedback / Status */
+  --color-danger: #991B1B;
+  --color-danger-bg: #FEF2F2;
+  --color-danger-border: #FCA5A5;
+
+  --color-warning: #9A3412;
+  --color-warning-bg: #FFF7ED;
+  --color-warning-border: #FDBA74;
+
+  --color-success: #065F46;
+  --color-success-bg: #ECFDF5;
+  --color-success-border: #6EE7B7;
+
+  --color-info: #1E40AF;
+  --color-info-bg: #EFF6FF;
+  --color-info-border: #BFDBFE;
+
+  /* Espaçamentos (Spacing scale) */
+  --space-2xs: 0.125rem; /* 2px */
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 0.75rem;   /* 12px */
+  --space-lg: 1rem;      /* 16px */
+  --space-xl: 1.5rem;    /* 24px */
+  --space-2xl: 2rem;     /* 32px */
+
+  /* Borda arredondada (Border Radius) */
+  --radius-sm: 0.25rem;  /* 4px */
+  --radius-md: 0.5rem;   /* 8px */
+  --radius-lg: 1rem;     /* 16px */
+  --radius-xl: 1.5rem;   /* 24px */
+  --radius-full: 9999px;
+
+  /* Fontes e Tipografia */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 23, 31, 0.06), 0 1px 2px 0 rgba(0, 23, 31, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 23, 31, 0.08), 0 2px 4px -1px rgba(0, 23, 31, 0.04);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 23, 31, 0.15), 0 10px 10px -5px rgba(0, 23, 31, 0.08);
+}
