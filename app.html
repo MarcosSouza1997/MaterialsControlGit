@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materials Control v1.0 — Dashboard</title>
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Supabase JS v2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="app-layout" style="display: flex; min-height: 100vh;">
+    <!-- Sidebar / Navigation shell -->
+    <aside style="width: 250px; background-color: var(--color-brand-black); color: var(--color-brand-white); padding: var(--space-lg);">
+      <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-xl);">Materials Control</h2>
+      <nav>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: var(--space-md);">
+          <li><a href="#" style="color: var(--color-brand-accent); text-decoration: none; font-weight: 600;">Dashboard</a></li>
+        </ul>
+      </nav>
+      <div style="margin-top: auto; padding-top: var(--space-2xl);">
+        <button id="logout-btn" class="btn btn-secondary" style="width: 100%; border-color: var(--color-brand-accent); color: var(--color-brand-accent);">Sair</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main style="flex: 1; padding: var(--space-2xl);">
+      <header style="margin-bottom: var(--space-2xl);">
+        <h1 style="font-size: 1.75rem; color: var(--color-brand-dark);">Painel Geral</h1>
+        <p style="color: var(--color-text-muted);">Bem-vindo ao sistema de controle de insumos, <span id="user-name">...</span>.</p>
+      </header>
+
+      <div id="role-denied-alert" class="alert alert-danger" style="display: none;">
+        Acesso restrito. Seu perfil (<span id="user-role-name"></span>) não possui permissão para visualizar esta área.
+      </div>
+
+      <div id="dashboard-card" class="card">
+        <h2 class="card-title">Sessão Autenticada</h2>
+        <p style="margin-top: var(--space-sm); font-size: 0.875rem;">
+          Perfil ativo: <strong id="profile-role">...</strong><br>
+          Centro de custo: <span id="profile-cost-center">Não informado</span>
+        </p>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { logout } from './js/auth.js';
+    import { requireAuth, state } from './js/guards.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Guarda de Rota: exige autenticação e perfil ativo
+      const profile = await requireAuth();
+      if (!profile) return;
+
+      // Exibir informações do perfil na interface
+      document.getElementById('user-name').textContent = profile.full_name || 'Usuário';
+      document.getElementById('profile-role').textContent = profile.role;
+      if (profile.cost_center) {
+        document.getElementById('profile-cost-center').textContent = profile.cost_center;
+      }
+
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        await logout();
+      });
+    });
+  </script>
+</body>
+</html>

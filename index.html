@@ -33,14 +33,48 @@
           <input type="password" id="password" class="form-input" placeholder="••••••••" required>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--space-md);">Entrar</button>
+        <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; margin-top: var(--space-md);">Entrar</button>
       </form>
     </div>
   </main>
 
   <script type="module">
-    import { supabase } from './js/supabase.js';
-    console.log('Insumos Control v1.0 inicializado.', supabase);
+    import { login, getCurrentSession } from './js/auth.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Verificar se o usuário já possui sessão ativa
+      const session = await getCurrentSession();
+      if (session) {
+        window.location.href = 'app.html';
+        return;
+      }
+
+      const form = document.getElementById('login-form');
+      const alertBox = document.getElementById('login-alert');
+      const submitBtn = document.getElementById('submit-btn');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.style.display = 'none';
+        alertBox.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Entrando...';
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        try {
+          await login(email, password);
+          window.location.href = 'app.html';
+        } catch (err) {
+          alertBox.textContent = err.message;
+          alertBox.style.display = 'block';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Entrar';
+        }
+      });
+    });
   </script>
 </body>
 </html>
