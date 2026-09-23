@@ -63,13 +63,24 @@
         Acesso restrito. Seu perfil (<span id="user-role-name"></span>) não possui permissão para visualizar esta área.
       </div>
 
-      <div id="dashboard-card" class="card">
+      <div id="dashboard-card" class="card" style="margin-bottom: var(--space-xl);">
         <h2 class="card-title">Sessão Autenticada</h2>
         <p style="margin-top: var(--space-sm); font-size: 0.875rem;">
           Perfil ativo: <strong id="profile-role">...</strong><br>
           Centro de custo: <span id="profile-cost-center">Não informado</span>
         </p>
       </div>
+
+      <!-- Seção Catálogo / Estoque de Itens -->
+      <section class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <h2 class="card-title">Catálogo de Itens e Saldo</h2>
+          <button id="refresh-items-btn" class="btn btn-secondary" style="font-size: 0.75rem; padding: var(--space-xs) var(--space-md);">Atualizar</button>
+        </div>
+        <div id="items-list-container">
+          <p style="color: var(--color-text-muted);">Carregando catálogo...</p>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -77,6 +88,7 @@
     import { logout } from './js/auth.js';
     import { requireAuth } from './js/guards.js';
     import { setupNavigation } from './js/modules/navigation.js';
+    import { fetchItemsWithStock, renderItemsTable } from './js/modules/items.js';
 
     document.addEventListener('DOMContentLoaded', async () => {
       // Guarda de Rota: exige autenticação e perfil ativo
@@ -92,6 +104,19 @@
 
       // Configurar navegação por perfil
       setupNavigation(profile.role);
+
+      // Carregar e renderizar catálogo de itens com saldo
+      async function loadCatalog() {
+        const items = await fetchItemsWithStock();
+        renderItemsTable('items-list-container', items, 1);
+      }
+
+      await loadCatalog();
+
+      document.getElementById('refresh-items-btn').addEventListener('click', async () => {
+        document.getElementById('items-list-container').innerHTML = '<p style="color: var(--color-text-muted);">Carregando catálogo...</p>';
+        await loadCatalog();
+      });
 
       document.getElementById('logout-btn').addEventListener('click', async () => {
         await logout();
