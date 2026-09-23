@@ -30,24 +30,37 @@
     <main style="flex: 1; padding: var(--space-2xl);">
       <header style="margin-bottom: var(--space-2xl);">
         <h1 style="font-size: 1.75rem; color: var(--color-brand-dark);">Painel Geral</h1>
-        <p style="color: var(--color-text-muted);">Bem-vindo ao sistema de controle de insumos.</p>
+        <p style="color: var(--color-text-muted);">Bem-vindo ao sistema de controle de insumos, <span id="user-name">...</span>.</p>
       </header>
 
-      <div class="card">
+      <div id="role-denied-alert" class="alert alert-danger" style="display: none;">
+        Acesso restrito. Seu perfil (<span id="user-role-name"></span>) não possui permissão para visualizar esta área.
+      </div>
+
+      <div id="dashboard-card" class="card">
         <h2 class="card-title">Sessão Autenticada</h2>
-        <p style="margin-top: var(--space-sm); font-size: 0.875rem;">Você está conectado com sucesso no Materials Control v1.0.</p>
+        <p style="margin-top: var(--space-sm); font-size: 0.875rem;">
+          Perfil ativo: <strong id="profile-role">...</strong><br>
+          Centro de custo: <span id="profile-cost-center">Não informado</span>
+        </p>
       </div>
     </main>
   </div>
 
   <script type="module">
-    import { logout, getCurrentSession } from './js/auth.js';
+    import { logout } from './js/auth.js';
+    import { requireAuth, state } from './js/guards.js';
 
     document.addEventListener('DOMContentLoaded', async () => {
-      const session = await getCurrentSession();
-      if (!session) {
-        window.location.href = 'index.html';
-        return;
+      // Guarda de Rota: exige autenticação e perfil ativo
+      const profile = await requireAuth();
+      if (!profile) return;
+
+      // Exibir informações do perfil na interface
+      document.getElementById('user-name').textContent = profile.full_name || 'Usuário';
+      document.getElementById('profile-role').textContent = profile.role;
+      if (profile.cost_center) {
+        document.getElementById('profile-cost-center').textContent = profile.cost_center;
       }
 
       document.getElementById('logout-btn').addEventListener('click', async () => {
