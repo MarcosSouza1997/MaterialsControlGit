@@ -1,4 +1,5 @@
 import { esc, toast, emptyState, formatDate, formatMoney, paginate } from '../ui.js';
+import { renderAuditoriaTab } from './auditoria-tab.js';
 
 /**
  * Returns formatted label for category
@@ -49,17 +50,23 @@ export async function render(container, ctx) {
           <p class="text-body-sm text-muted mt-2xs">Análise de consumo de materiais e registros de movimentação.</p>
         </div>
 
-        <!-- Tab Navigation Bar (Structure ready for Auditoria in T-013; showing only Consumo now) -->
+        <!-- Tab Navigation Bar -->
         <div class="tab-nav">
-          <button type="button" class="tab-btn active" id="tab-consumo">
+          <button type="button" class="tab-btn active" id="tab-consumo" data-tab="consumo">
             <span class="material-symbols-outlined">pie_chart</span>
             Consumo de Materiais
+          </button>
+          <button type="button" class="tab-btn" id="tab-auditoria" data-tab="auditoria">
+            <span class="material-symbols-outlined">history</span>
+            Auditoria do Sistema
           </button>
         </div>
       </div>
 
-      <!-- Filters Section -->
-      <div class="card flex flex-col gap-md">
+      <!-- Content Container for Consumo Tab -->
+      <div id="tab-content-consumo" class="flex flex-col gap-lg">
+        <!-- Filters Section -->
+        <div class="card flex flex-col gap-md">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-sm">
           <h2 class="text-heading flex items-center gap-xs">
             <span class="material-symbols-outlined text-primary">filter_alt</span>
@@ -102,7 +109,7 @@ export async function render(container, ctx) {
 
           <!-- Cost Center Filter (DB cost_centers table) -->
           <div class="form-group">
-            <label class="form-label" for="filter-cost-center">Setor / Centro de Custo</label>
+            <label class="form-label" for="filter-cost-center">Setor</label>
             <select id="filter-cost-center" class="form-select">
               <option value="">Todos os setores</option>
             </select>
@@ -122,7 +129,7 @@ export async function render(container, ctx) {
               Solicitante
             </button>
             <button type="button" class="grouping-pill" data-grouping="centro_custo">
-              Setor / Centro de Custo
+              Setor
             </button>
           </div>
         </div>
@@ -163,8 +170,17 @@ export async function render(container, ctx) {
 
       <!-- Pagination Container -->
       <div id="report-pagination" class="flex items-center justify-between mt-xs"></div>
+      </div> <!-- End #tab-content-consumo -->
+
+      <!-- Content Container for Auditoria Tab -->
+      <div id="tab-content-auditoria" class="flex flex-col gap-lg" style="display: none;"></div>
     </div>
   `;
+
+  let auditoriaInitialized = false;
+
+  // Bind Tab Switching Events
+  bindTabEvents();
 
   // Fetch Auxiliary Data (cost_centers, items, profiles) & Consumption View
   await Promise.all([
@@ -173,8 +189,39 @@ export async function render(container, ctx) {
     fetchConsumptionData()
   ]);
 
-  // Bind Event Listeners
+  // Bind Event Listeners for Consumo
   bindEvents();
+
+  /**
+   * Binds tab switching navigation events
+   */
+  function bindTabEvents() {
+    const tabConsumo = container.querySelector('#tab-consumo');
+    const tabAuditoria = container.querySelector('#tab-auditoria');
+    const contentConsumo = container.querySelector('#tab-content-consumo');
+    const contentAuditoria = container.querySelector('#tab-content-auditoria');
+
+    if (tabConsumo && tabAuditoria) {
+      tabConsumo.addEventListener('click', () => {
+        tabConsumo.classList.add('active');
+        tabAuditoria.classList.remove('active');
+        if (contentConsumo) contentConsumo.style.display = 'flex';
+        if (contentAuditoria) contentAuditoria.style.display = 'none';
+      });
+
+      tabAuditoria.addEventListener('click', async () => {
+        tabAuditoria.classList.add('active');
+        tabConsumo.classList.remove('active');
+        if (contentConsumo) contentConsumo.style.display = 'none';
+        if (contentAuditoria) contentAuditoria.style.display = 'flex';
+
+        if (!auditoriaInitialized) {
+          auditoriaInitialized = true;
+          await renderAuditoriaTab(contentAuditoria, ctx);
+        }
+      });
+    }
+  }
 
   /**
    * Fetches cost_centers from database
@@ -474,7 +521,7 @@ export async function render(container, ctx) {
     renderMetrics(filteredRows, groupedData);
 
     const paginated = paginate(groupedData, currentPage, 25);
-    renderTable(paginated.data);
+    renderTable(paginated.data, groupedData);
     renderPaginationControls(paginated);
   }
 
@@ -503,9 +550,10 @@ export async function render(container, ctx) {
 
   /**
    * Renders the grouped consumption data table
-   * @param {Array} rows
+   * @param {Array} rows - Paginated rows
+   * @param {Array} allGrouped - All grouped data (to calculate Total Geral)
    */
-  function renderTable(rows) {
+  function renderTable(rows, allGrouped = []) {
     const tableContainer = container.querySelector('#report-table-container');
     if (!tableContainer) return;
 
@@ -513,6 +561,13 @@ export async function render(container, ctx) {
       tableContainer.innerHTML = emptyState('Nenhum dado de consumo encontrado para os filtros selecionados.');
       return;
     }
+
+    let overallQty = 0;
+    let overallVal = 0;
+    allGrouped.forEach(g => {
+      overallQty += g.totalQuantity || 0;
+      overallVal += g.totalValue || 0;
+    });
 
     let headersHtml = '';
 
@@ -527,19 +582,36 @@ export async function render(container, ctx) {
     } else if (currentGrouping === 'solicitante') {
       headersHtml = `
         <th>Solicitante</th>
-        <th>Setor / Centro de Custo</th>
+        <th>Setor</th>
         <th class="text-center">Total de Pedidos/Saídas</th>
         <th class="text-center">Qtd. Total Itens</th>
         <th class="text-right">Valor Total (R$)</th>
       `;
     } else if (currentGrouping === 'centro_custo') {
       headersHtml = `
-        <th>Setor / Centro de Custo</th>
+        <th>Setor</th>
         <th class="text-center">Registros de Saída</th>
         <th class="text-center">Qtd. Total Itens</th>
         <th class="text-right">Valor Total Consumido (R$)</th>
       `;
     }
+
+    const tfootHtml = `
+      <tfoot>
+        <tr class="table-footer-row">
+          ${currentGrouping === 'centro_custo'
+            ? `<td colspan="2" class="font-bold text-body">Total Geral</td>`
+            : `<td colspan="3" class="font-bold text-body">Total Geral</td>`
+          }
+          <td class="text-center font-bold tabular-nums text-body">
+            ${overallQty.toLocaleString('pt-BR')}
+          </td>
+          <td class="text-right font-bold tabular-nums text-primary">
+            ${formatMoney(overallVal)}
+          </td>
+        </tr>
+      </tfoot>
+    `;
 
     tableContainer.innerHTML = `
       <table class="table">
@@ -611,6 +683,7 @@ export async function render(container, ctx) {
             return '';
           }).join('')}
         </tbody>
+        ${tfootHtml}
       </table>
     `;
   }
@@ -701,7 +774,7 @@ export async function render(container, ctx) {
         g.totalValue.toFixed(2).replace('.', ',')
       ]);
     } else if (currentGrouping === 'solicitante') {
-      headers = ['Solicitante', 'Setor / Centro de Custo', 'Registros de Saída', 'Quantidade Total', 'Valor Total (R$)'];
+      headers = ['Solicitante', 'Setor', 'Registros de Saída', 'Quantidade Total', 'Valor Total (R$)'];
       csvRows = groupedData.map(g => [
         `"${(g.meta.name || '').replace(/"/g, '""')}"`,
         `"${(g.meta.cost_center || '').replace(/"/g, '""')}"`,
@@ -710,7 +783,7 @@ export async function render(container, ctx) {
         g.totalValue.toFixed(2).replace('.', ',')
       ]);
     } else if (currentGrouping === 'centro_custo') {
-      headers = ['Setor / Centro de Custo', 'Registros de Saída', 'Quantidade Total', 'Valor Total Consumido (R$)'];
+      headers = ['Setor', 'Registros de Saída', 'Quantidade Total', 'Valor Total Consumido (R$)'];
       csvRows = groupedData.map(g => [
         `"${(g.meta.cost_center || '').replace(/"/g, '""')}"`,
         g.recordsCount,

@@ -117,3 +117,111 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
+
+/* Section action buttons (Limpar Filtros, Exportar CSV) */
+#btn-clear-filters,
+#btn-export-csv,
+#btn-clear-audit-filters {
+  width: fit-content;
+  align-self: flex-end;
+}
+
+/* Table Footer Total Geral */
+.table tfoot tr.table-footer-row {
+  background-color: var(--color-bg-main);
+  border-top: 2px solid var(--color-border-subtle);
+}
+
+.table tfoot td {
+  padding: var(--space-md) var(--space-lg);
+  font-weight: 700;
+  color: var(--color-brand-dark);
+}
+
+/* Auditoria Details & JSON Formatting */
+.audit-details-cell {
+  background-color: var(--color-bg-main);
+  padding: var(--space-lg) !important;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.audit-diff-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.json-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .json-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.json-box {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  overflow-x: auto;
+}
+
+.code-json {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  color: var(--color-brand-dark);
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.changed-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background-color: rgba(0, 126, 167, 0.1);
+  color: var(--color-brand-primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.diff-table th {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-muted);
+  padding: var(--space-xs) var(--space-md);
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.diff-table td {
+  padding: var(--space-xs) var(--space-md);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.diff-table tr.changed-row {
+  background-color: rgba(0, 168, 232, 0.05);
+}
