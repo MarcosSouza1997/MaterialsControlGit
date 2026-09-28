@@ -61,6 +61,21 @@ function formatAvailableStock(qty, unit) {
 export async function render(container, ctx) {
   let currentCostCenter = (ctx.profile && ctx.profile.cost_center) ? ctx.profile.cost_center : '';
   let currentJustification = '';
+  let costCentersList = [];
+
+  // Fetch cost_centers list from Supabase
+  try {
+    const { data: ccData, error: ccError } = await ctx.supabase
+      .from('cost_centers')
+      .select('*')
+      .order('name', { ascending: true });
+
+    if (!ccError && ccData) {
+      costCentersList = ccData;
+    }
+  } catch (err) {
+    console.error('Erro ao buscar cost_centers:', err);
+  }
 
   // Render main layout structure
   container.innerHTML = `
@@ -428,15 +443,19 @@ export async function render(container, ctx) {
 
       <div class="cart-form mt-sm">
         <div class="form-group mb-sm">
-          <label class="form-label" for="cart-cost-center">Centro de Custo / Departamento *</label>
-          <input
-            type="text"
+          <label class="form-label" for="cart-cost-center">Setor *</label>
+          <select
             id="cart-cost-center"
-            class="form-input"
-            value="${esc(currentCostCenter)}"
-            placeholder="Ex: Tecnologia da Informação"
+            class="form-select"
             required
-          />
+          >
+            <option value="" ${!currentCostCenter ? 'selected' : ''} disabled>Selecione o setor...</option>
+            ${costCentersList.map(cc => {
+              const ccName = typeof cc === 'object' ? (cc.name || cc.code || '') : String(cc);
+              const isSelected = currentCostCenter && currentCostCenter.toLowerCase() === ccName.toLowerCase();
+              return `<option value="${esc(ccName)}" ${isSelected ? 'selected' : ''}>${esc(ccName)}</option>`;
+            }).join('')}
+          </select>
         </div>
 
         <div class="form-group mb-sm">
@@ -533,7 +552,7 @@ export async function render(container, ctx) {
 
     const costCenter = (currentCostCenter || '').trim();
     if (!costCenter) {
-      toast('Informe o centro de custo.', 'warning');
+      toast('Selecione o setor.', 'warning');
       const ccInput = container.querySelector('#cart-cost-center');
       if (ccInput) ccInput.focus();
       return;
