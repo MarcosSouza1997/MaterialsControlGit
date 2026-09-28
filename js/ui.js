@@ -140,6 +140,10 @@ export function openModal({ title, body, actions = [] }) {
  */
 export function formatDate(dateVal) {
   if (!dateVal) return '-';
+  if (typeof dateVal === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateVal.trim())) {
+    const [year, month, day] = dateVal.trim().split('-');
+    return `${day}/${month}/${year}`;
+  }
   const d = new Date(dateVal);
   if (isNaN(d.getTime())) return '-';
   return d.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
