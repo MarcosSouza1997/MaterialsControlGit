@@ -270,7 +270,7 @@ export async function render(container, ctx) {
           <thead>
             <tr>
               <th>ID & HORÁRIO</th>
-              <th>SOLICITANTE & CENTRO DE CUSTO</th>
+              <th>SOLICITANTE & SETOR</th>
               <th>ITEM & SALDO</th>
               <th>JUSTIFICATIVA</th>
               <th>AUDITORIA & ALERTA</th>
