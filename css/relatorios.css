@@ -1,4 +1,4 @@
-/* CSS specific to Relatórios & Auditoria view (T-012) */
+/* CSS specific to Relatórios & Auditoria view (T-012, T-013b) */
 
 .relatorios-container {
   display: flex;
@@ -57,7 +57,7 @@
 
 @media (min-width: 1024px) {
   .relatorios-filters-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -201,7 +201,7 @@
 .diff-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   background-color: var(--color-surface);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
@@ -224,4 +224,16 @@
 
 .diff-table tr.changed-row {
   background-color: rgba(0, 168, 232, 0.05);
+}
+
+.border-t {
+  border-top-width: 1px;
+}
+
+.border-subtle {
+  border-color: var(--color-border-subtle);
+}
+
+.pt-md {
+  padding-top: var(--space-md);
 }
