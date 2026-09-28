@@ -1,0 +1,38 @@
+:root {
+  /* Paleta principal */
+  --color-brand-black:   #00171F;
+  --color-brand-dark:    #003459;
+  --color-brand-primary: #007EA7;
+  --color-brand-accent:  #00A8E8;
+  --color-brand-white:   #FFFFFF;
+
+  /* Neutros */
+  --color-bg-main:       #F4F7F9;
+  --color-surface:       #FFFFFF;
+  --color-border-subtle: #E2E8F0;
+  --color-text-main:     #00171F;
+  --color-text-muted:    #3F4E58;
+
+  /* Status */
+  --color-warning-bg: #FFF7ED; --color-warning-border: #FDBA74; --color-warning: #9A3412;
+  --color-success-bg: #ECFDF5; --color-success-border: #6EE7B7; --color-success: #065F46;
+  --color-danger-bg:  #FEF2F2; --color-danger-border:  #FCA5A5; --color-danger:  #991B1B;
+  --color-info-bg:    #EFF6FF; --color-info-border:    #BFDBFE; --color-info:    #1E40AF;
+  --color-purple-bg:  #F5F3FF; --color-purple-border:  #C4B5FD; --color-purple:  #5B21B6;
+
+  /* Tipografia */
+  --font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-mono:   'JetBrains Mono', ui-monospace, Consolas, monospace;
+
+  /* Espaço */
+  --space-2xs: 0.125rem; --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 0.75rem;
+  --space-lg: 1rem;      --space-xl: 1.5rem;  --space-2xl: 2rem;
+
+  /* Forma */
+  --radius-md: 0.5rem; --radius-lg: 1rem; --radius-xl: 1.5rem; --radius-full: 9999px;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(0,23,31,.06), 0 1px 2px rgba(0,23,31,.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,23,31,.08), 0 2px 4px -1px rgba(0,23,31,.04);
+  --shadow-lg: 0 20px 25px -5px rgba(0,23,31,.15), 0 10px 10px -5px rgba(0,23,31,.08);
+}
