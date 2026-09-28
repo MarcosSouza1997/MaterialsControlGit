@@ -224,34 +224,30 @@ export async function render(container, ctx) {
       </div>
 
       <!-- Filter Tabs & Search -->
-      <div class="card p-md mb-lg">
-        <div class="tabs-header mb-md">
-          <button type="button" class="tab-btn ${activeTab === 'todas' ? 'active' : ''}" data-tab="todas">
-            Todas <span class="badge-count">${tabCounts.todas}</span>
-          </button>
-          <button type="button" class="tab-btn ${activeTab === 'pendentes' ? 'active' : ''}" data-tab="pendentes">
-            Pendentes <span class="badge-count">${tabCounts.pendentes}</span>
-          </button>
-          <button type="button" class="tab-btn ${activeTab === 'duplicidade' ? 'active' : ''}" data-tab="duplicidade">
-            Com Alerta de Duplicidade <span class="badge-count">${tabCounts.duplicidade}</span>
-          </button>
-          <button type="button" class="tab-btn ${activeTab === 'aprovadas' ? 'active' : ''}" data-tab="aprovadas">
-            Aprovadas <span class="badge-count">${tabCounts.aprovadas}</span>
-          </button>
-          <button type="button" class="tab-btn ${activeTab === 'rejeitadas' ? 'active' : ''}" data-tab="rejeitadas">
-            Rejeitadas <span class="badge-count">${tabCounts.rejeitadas}</span>
-          </button>
-          <button type="button" class="tab-btn ${activeTab === 'entregues' ? 'active' : ''}" data-tab="entregues">
-            Entregues <span class="badge-count">${tabCounts.entregues}</span>
-          </button>
-        </div>
+      <div class="catalog-category-chips mb-lg" id="status-tabs">
+        <button type="button" class="category-chip ${activeTab === 'todas' ? 'active' : ''}" data-tab="todas">
+          Todas <span class="badge-count">${tabCounts.todas}</span>
+        </button>
+        <button type="button" class="category-chip ${activeTab === 'pendentes' ? 'active' : ''}" data-tab="pendentes">
+          Pendentes <span class="badge-count">${tabCounts.pendentes}</span>
+        </button>
+        <button type="button" class="category-chip ${activeTab === 'duplicidade' ? 'active' : ''}" data-tab="duplicidade">
+          Com Alerta de Duplicidade <span class="badge-count">${tabCounts.duplicidade}</span>
+        </button>
+        <button type="button" class="category-chip ${activeTab === 'aprovadas' ? 'active' : ''}" data-tab="aprovadas">
+          Aprovadas <span class="badge-count">${tabCounts.aprovadas}</span>
+        </button>
+        <button type="button" class="category-chip ${activeTab === 'rejeitadas' ? 'active' : ''}" data-tab="rejeitadas">
+          Rejeitadas <span class="badge-count">${tabCounts.rejeitadas}</span>
+        </button>
+        <button type="button" class="category-chip ${activeTab === 'entregues' ? 'active' : ''}" data-tab="entregues">
+          Entregues <span class="badge-count">${tabCounts.entregues}</span>
+        </button>
+      </div>
 
-        <div class="filters-bar">
-          <div class="search-box">
-            <span class="material-symbols-outlined">search</span>
-            <input type="text" id="input-search" class="form-input" placeholder="Filtrar por solicitante, ID #REQ ou item..." value="${esc(searchQuery)}">
-          </div>
-        </div>
+      <div class="catalog-search-wrapper mb-lg">
+        <span class="material-symbols-outlined catalog-search-icon">search</span>
+        <input type="search" id="input-search" class="form-input catalog-search-input" placeholder="Filtrar por solicitante, ID #REQ ou item..." value="${esc(searchQuery)}">
       </div>
 
       <!-- Requests Table -->
@@ -437,7 +433,7 @@ export async function render(container, ctx) {
     }
 
     // Tabs
-    const tabBtns = container.querySelectorAll('.tab-btn');
+    const tabBtns = container.querySelectorAll('.category-chip');
     tabBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         activeTab = btn.getAttribute('data-tab');
