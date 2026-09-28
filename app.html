@@ -3,69 +3,187 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Materials Control - App</title>
+  <title>Materials Control</title>
 
+  <!-- Google Fonts & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
+  <!-- CSS Stylesheets -->
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/components.css">
 
   <style>
-    body {
-      min-height: 100vh;
-      background-color: var(--color-bg-main);
-      padding: var(--space-2xl);
+    /* Shell custom styles without inline style attributes */
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background-color: var(--color-brand-primary);
+      color: var(--color-brand-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      text-transform: uppercase;
     }
 
-    .app-card {
-      max-width: 600px;
-      margin: 0 auto;
+    .brand-logo-icon {
+      font-size: 24px;
+      color: var(--color-brand-accent);
+    }
+
+    .brand-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-brand-white);
+      letter-spacing: -0.02em;
+    }
+
+    .sidebar-footer {
+      padding: var(--space-lg) var(--space-xl);
+      border-top: 1px solid rgba(226, 232, 240, 0.1);
     }
   </style>
 
+  <!-- Supabase JS v2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <div class="card app-card">
-    <div class="flex items-center justify-between mb-lg">
-      <h2 class="text-title">Materials Control</h2>
-      <button type="button" id="btn-logout" class="btn btn-secondary btn-sm">
-        <span class="material-symbols-outlined">logout</span>
-        Sair
-      </button>
-    </div>
-
-    <div class="alert alert-info mb-lg">
-      <div>
-        <p class="text-body font-semibold" id="user-name">Carregando...</p>
-        <p class="text-body-sm" id="user-role">Perfil: ...</p>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="material-symbols-outlined brand-logo-icon">inventory_2</span>
+        <span class="brand-title">Materials Control</span>
       </div>
-    </div>
 
-    <p class="text-body text-muted">
-      Ambiente principal do sistema. O layout completo com shell e rotas será implementado na T-003.
-    </p>
+      <nav class="sidebar-nav" id="sidebar-menu">
+        <!-- Navigation links rendered dynamically based on user role -->
+      </nav>
+
+      <div class="sidebar-footer">
+        <button type="button" id="btn-logout" class="btn btn-secondary btn-sm w-full" style="color: var(--color-brand-white); border-color: rgba(255,255,255,0.3);">
+          <span class="material-symbols-outlined">logout</span>
+          Sair
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div id="topbar-breadcrumb" class="text-body-sm font-semibold text-muted">
+          Materiais e Suprimentos / Dashboard
+        </div>
+
+        <div class="flex items-center gap-md">
+          <div class="text-right">
+            <p id="user-display-name" class="text-label">...</p>
+            <span id="user-role-badge" class="status-badge status-aprovado">...</span>
+          </div>
+          <div id="user-avatar" class="user-avatar">--</div>
+        </div>
+      </header>
+
+      <!-- View Container -->
+      <main id="view-root" class="content-body">
+        <!-- View content dynamically rendered by Router -->
+      </main>
+    </div>
   </div>
 
   <script type="module">
     import { requireAuth } from './js/guards.js';
     import { logout } from './js/auth.js';
+    import { supabase } from './js/supabase.js';
+    import { initRouter } from './js/router.js';
     import { esc } from './js/ui.js';
 
+    // Menu definition mapping routes, icons, titles, and permitted roles
+    const MENU_ITEMS = [
+      { hash: '#dashboard', label: 'Dashboard', icon: 'dashboard', roles: ['solicitante', 'almoxarife', 'gestor_ti', 'diretoria'] },
+      { hash: '#catalogo', label: 'Catálogo & Requisição', icon: 'grid_view', roles: ['solicitante', 'almoxarife', 'gestor_ti'] },
+      { hash: '#meus-pedidos', label: 'Meus Pedidos', icon: 'orders', roles: ['solicitante', 'almoxarife', 'gestor_ti'] },
+      { hash: '#aprovacoes', label: 'Central de Aprovações', icon: 'fact_check', roles: ['almoxarife', 'gestor_ti'] },
+      { hash: '#estoque', label: 'Controle de Estoque', icon: 'inventory', roles: ['almoxarife', 'gestor_ti', 'diretoria'] },
+      { hash: '#relatorios', label: 'Relatórios & Auditoria', icon: 'analytics', roles: ['gestor_ti', 'diretoria'] },
+      { hash: '#usuarios', label: 'Usuários', icon: 'group', roles: ['gestor_ti'] }
+    ];
+
+    /**
+     * Formats role label for display
+     */
+    function formatRoleLabel(role) {
+      switch (role) {
+        case 'gestor_ti': return 'Gestor de TI';
+        case 'almoxarife': return 'Almoxarife';
+        case 'diretoria': return 'Diretoria';
+        case 'solicitante':
+        default: return 'Solicitante';
+      }
+    }
+
+    /**
+     * Extracts initials from full name
+     */
+    function getInitials(name) {
+      if (!name) return 'U';
+      const parts = name.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      }
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+
     document.addEventListener('DOMContentLoaded', async () => {
+      // 1. Authenticate user & get profile
       const profile = await requireAuth();
       if (!profile) return;
 
-      document.getElementById('user-name').textContent = profile.full_name || 'Usuário Sem Nome';
-      document.getElementById('user-role').textContent = `Perfil: ${profile.role || 'solicitante'}`;
+      // 2. Render user info in topbar
+      const userNameEl = document.getElementById('user-display-name');
+      const userRoleBadgeEl = document.getElementById('user-role-badge');
+      const userAvatarEl = document.getElementById('user-avatar');
 
-      document.getElementById('btn-logout').addEventListener('click', () => {
-        logout();
-      });
+      if (userNameEl) userNameEl.textContent = profile.full_name || 'Usuário';
+      if (userRoleBadgeEl) userRoleBadgeEl.textContent = formatRoleLabel(profile.role);
+      if (userAvatarEl) userAvatarEl.textContent = getInitials(profile.full_name);
+
+      // 3. Render sidebar navigation filtered by role
+      const navContainer = document.getElementById('sidebar-menu');
+      if (navContainer) {
+        const userRole = profile.role || 'solicitante';
+        const allowedItems = MENU_ITEMS.filter(item => item.roles.includes(userRole));
+
+        navContainer.innerHTML = allowedItems.map(item => `
+          <a href="${esc(item.hash)}" class="sidebar-link">
+            <span class="material-symbols-outlined">${esc(item.icon)}</span>
+            <span>${esc(item.label)}</span>
+          </a>
+        `).join('');
+      }
+
+      // 4. Bind logout button
+      const btnLogout = document.getElementById('btn-logout');
+      if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+          logout();
+        });
+      }
+
+      // 5. Initialize application router with context
+      const ctx = {
+        profile,
+        supabase
+      };
+
+      initRouter(ctx);
     });
   </script>
 </body>
