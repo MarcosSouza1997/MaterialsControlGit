@@ -131,7 +131,7 @@ export async function render(container, ctx) {
     } else if (activeTab === 'duplicidade') {
       list = approvalQueue.filter(r => r.recent_delivery_days !== null && r.recent_delivery_days !== undefined);
     } else if (activeTab === 'aprovadas') {
-      list = allRequests.filter(r => r.status === 'APROVADO');
+      list = allRequests.filter(r => r.status === 'APROVADO' || r.status === 'EM_SEPARACAO');
     } else if (activeTab === 'rejeitadas') {
       list = allRequests.filter(r => r.status === 'REJEITADO');
     } else if (activeTab === 'entregues') {
@@ -167,7 +167,7 @@ export async function render(container, ctx) {
       todas: allRequests.length,
       pendentes: approvalQueue.length,
       duplicidade: approvalQueue.filter(r => r.recent_delivery_days !== null && r.recent_delivery_days !== undefined).length,
-      aprovadas: allRequests.filter(r => r.status === 'APROVADO').length,
+      aprovadas: allRequests.filter(r => r.status === 'APROVADO' || r.status === 'EM_SEPARACAO').length,
       rejeitadas: allRequests.filter(r => r.status === 'REJEITADO').length,
       entregues: allRequests.filter(r => r.status === 'ENTREGUE').length
     };
@@ -359,6 +359,18 @@ export async function render(container, ctx) {
                   <span class="material-symbols-outlined">close</span>
                 </button>
               ` : ''}
+              ${r.status === 'APROVADO' && (profile.role === 'almoxarife' || profile.role === 'gestor_ti') ? `
+                <button type="button" class="btn btn-primary btn-sm btn-start-separation" data-id="${r.id}" title="Iniciar Separação">
+                  <span class="material-symbols-outlined">inventory_2</span>
+                  Separar
+                </button>
+              ` : ''}
+              ${r.status === 'EM_SEPARACAO' && (profile.role === 'almoxarife' || profile.role === 'gestor_ti') ? `
+                <button type="button" class="btn btn-success btn-sm btn-deliver" data-id="${r.id}" title="Registrar Entrega">
+                  <span class="material-symbols-outlined">local_shipping</span>
+                  Entregar
+                </button>
+              ` : ''}
             </div>
           </div>
         </td>
@@ -467,6 +479,68 @@ export async function render(container, ctx) {
         const id = btn.getAttribute('data-id');
         handleRejectModal(id);
       });
+    });
+
+    // Start separation buttons
+    const startBtns = container.querySelectorAll('.btn-start-separation');
+    startBtns.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.getAttribute('data-id');
+        await handleStartSeparation(id);
+      });
+    });
+
+    // Deliver buttons
+    const deliverBtns = container.querySelectorAll('.btn-deliver');
+    deliverBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = btn.getAttribute('data-id');
+        handleDeliverModal(id);
+      });
+    });
+  }
+
+  async function handleStartSeparation(requestId) {
+    try {
+      const { error } = await supabase.rpc('start_separation', { p_request_id: requestId });
+      if (error) throw error;
+
+      toast('Separação iniciada com sucesso!', 'success');
+      await loadData();
+    } catch (err) {
+      console.error('Erro ao iniciar separação:', err);
+      toast(err.message || 'Erro ao iniciar separação', 'error');
+    }
+  }
+
+  function handleDeliverModal(requestId) {
+    openModal({
+      title: 'Confirmar Entrega',
+      body: '<p class="text-body">Deseja confirmar a entrega deste pedido ao solicitante? O saldo em estoque será baixado utilizando o lote com vencimento mais próximo (FEFO).</p>',
+      actions: [
+        {
+          text: 'Cancelar',
+          class: 'btn btn-secondary',
+          onClick: (closeModal) => closeModal()
+        },
+        {
+          text: 'Confirmar Entrega',
+          class: 'btn btn-success',
+          onClick: async (closeModal) => {
+            try {
+              const { error } = await supabase.rpc('deliver_request', { p_request_id: requestId });
+              if (error) throw error;
+
+              toast('Entrega registrada com sucesso!', 'success');
+              closeModal();
+              await loadData();
+            } catch (err) {
+              console.error('Erro ao registrar entrega:', err);
+              toast(err.message || 'Erro ao registrar entrega', 'error');
+            }
+          }
+        }
+      ]
     });
   }
 
