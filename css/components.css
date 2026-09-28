@@ -315,6 +315,24 @@ body {
   color: var(--color-text-muted);
 }
 
+.status-normal {
+  background-color: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
+}
+
+.status-abaixo-minimo, .status-abaixo_minimo {
+  background-color: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+  color: var(--color-warning);
+}
+
+.status-sem-estoque, .status-sem_estoque {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger-border);
+  color: var(--color-danger);
+}
+
 /* Table */
 .table-container {
   width: 100%;
@@ -914,6 +932,26 @@ body {
   margin-top: auto;
   padding-top: var(--space-sm);
   border-top: 1px solid var(--color-border-subtle);
+}
+
+/* Grid Utilities */
+.grid { display: grid; }
+.estoque-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .estoque-metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .estoque-metrics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 /* Utilities */
