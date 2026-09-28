@@ -203,7 +203,10 @@ async function renderGestaoDashboard(container, ctx) {
   const criticalCount = criticalItems.length;
   const criticalNames = criticalItems.map(i => i.name).slice(0, 2).join(', ');
 
-  const atRiskBatchesCount = alertsList.length;
+  const atRiskBatchesList = alertsList.filter(a =>
+    ['VALIDADE_PROXIMA', 'VENCIDO', 'LOTE_PARADO'].includes(a.alert_type)
+  );
+  const atRiskBatchesCount = atRiskBatchesList.length;
   const pendingApprovalCount = approvalQueue.length;
 
   // Prepare Consumption Chart Data for last 6 months
@@ -280,7 +283,7 @@ async function renderGestaoDashboard(container, ctx) {
           <div class="kpi-card-header">
             <div>
               <span class="kpi-title">Fila de Aprovação</span>
-              <div class="kpi-value primary">${pendingApprovalCount} Pedidos</div>
+              <div class="kpi-value primary">${pendingApprovalCount} ${pendingApprovalCount === 1 ? 'pedido' : 'pedidos'}</div>
               <span class="kpi-subtext">Aguardando sua análise</span>
             </div>
             <div class="kpi-icon-box">
@@ -376,24 +379,80 @@ async function renderGestaoDashboard(container, ctx) {
                 </tr>
               </thead>
               <tbody>
-                ${movementsList.map(m => `
-                  <tr>
-                    <td>
-                      <div>
-                        <strong>${esc(m.item_name)}</strong>
-                        <div class="text-body-sm font-code">${esc(m.sku)}</div>
-                      </div>
-                    </td>
-                    <td>
-                      <span class="status-badge status-${m.type.toLowerCase()}">${esc(m.type)}</span>
-                    </td>
-                    <td class="tabular-nums ${m.type === 'SAIDA' || m.type === 'DESCARTE' ? 'text-danger' : 'text-primary'}">
-                      ${m.type === 'SAIDA' || m.type === 'DESCARTE' ? '-' : '+'}${m.quantity}
-                    </td>
-                    <td>${esc(m.performer_name || 'Sistema')}</td>
-                    <td class="text-body-sm">${formatDateTime(m.created_at)}</td>
-                  </tr>
-                `).join('')}
+                ${movementsList.map(m => {
+                  const rawType = (m.type || '').toUpperCase();
+                  let typeBadge = '';
+                  let qtyStr = '';
+
+                  const qtyVal = Number(m.quantity) || 0;
+
+                  switch (rawType) {
+                    case 'ENTRADA':
+                      typeBadge = `
+                        <span class="inline-flex items-center gap-2xs font-semibold text-primary">
+                          <span class="material-symbols-outlined" style="font-size: 16px;">add_circle</span>
+                          Entrada
+                        </span>
+                      `;
+                      qtyStr = `<span class="text-primary font-semibold tabular-nums">+${Math.abs(qtyVal)}</span>`;
+                      break;
+                    case 'SAIDA':
+                      typeBadge = `
+                        <span class="inline-flex items-center gap-2xs font-semibold text-body">
+                          <span class="material-symbols-outlined" style="font-size: 16px;">remove_circle_outline</span>
+                          Saída
+                        </span>
+                      `;
+                      qtyStr = `<span class="text-body font-semibold tabular-nums">−${Math.abs(qtyVal)}</span>`;
+                      break;
+                    case 'AJUSTE':
+                      typeBadge = `
+                        <span class="inline-flex items-center gap-2xs font-semibold text-warning">
+                          <span class="material-symbols-outlined" style="font-size: 16px;">tune</span>
+                          Ajuste
+                        </span>
+                      `;
+                      if (qtyVal > 0) {
+                        qtyStr = `<span class="text-primary font-semibold tabular-nums">+${qtyVal}</span>`;
+                      } else if (qtyVal < 0) {
+                        qtyStr = `<span class="text-danger font-semibold tabular-nums">−${Math.abs(qtyVal)}</span>`;
+                      } else {
+                        qtyStr = `<span class="font-semibold tabular-nums">0</span>`;
+                      }
+                      break;
+                    case 'DESCARTE':
+                      typeBadge = `
+                        <span class="inline-flex items-center gap-2xs font-semibold text-danger">
+                          <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                          Descarte
+                        </span>
+                      `;
+                      qtyStr = `<span class="text-danger font-semibold tabular-nums">−${Math.abs(qtyVal)}</span>`;
+                      break;
+                    default:
+                      typeBadge = `<span class="text-muted">${esc(m.type)}</span>`;
+                      qtyStr = `<span class="tabular-nums">${qtyVal}</span>`;
+                  }
+
+                  return `
+                    <tr>
+                      <td>
+                        <div>
+                          <strong>${esc(m.item_name)}</strong>
+                          <div class="text-body-sm font-code">${esc(m.sku)}</div>
+                        </div>
+                      </td>
+                      <td>
+                        ${typeBadge}
+                      </td>
+                      <td>
+                        ${qtyStr}
+                      </td>
+                      <td>${esc(m.performer_name || 'Sistema')}</td>
+                      <td class="text-body-sm">${formatDateTime(m.created_at)}</td>
+                    </tr>
+                  `;
+                }).join('')}
               </tbody>
             </table>
           </div>
@@ -503,7 +562,7 @@ function renderConsumptionSVGChart(chartData) {
             <rect x="18" y="${yInfo}" width="14" height="${hInfo}" rx="2" fill="#003459" />
             <rect x="36" y="${yLimp}" width="14" height="${hLimp}" rx="2" fill="#00A8E8" />
             <rect x="54" y="${yOut}" width="14" height="${hOut}" rx="2" fill="#1E40AF" />
-            <text x="34" y="202" font-family="Inter" font-size="12" font-weight="${isCurrent ? '700' : '400'}" fill="${isCurrent ? '#007EA7' : '#3F4E58'}" text-anchor="middle">
+            <text x="34" y="202" font-family="Inter, sans-serif" font-size="12px" letter-spacing="normal" font-weight="${isCurrent ? '700' : '400'}" fill="${isCurrent ? 'var(--color-brand-dark)' : 'var(--color-text-muted)'}" text-anchor="middle">
               ${m.label}${isCurrent ? ' (Atual)' : ''}
             </text>
           </g>
