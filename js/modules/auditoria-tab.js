@@ -1,4 +1,4 @@
-import { esc, toast, emptyState, formatDateTime } from '../ui.js';
+import { esc, toast, emptyState, formatDate, formatDateTime, formatMoney, statusBadge } from '../ui.js';
 
 /**
  * Renders the Auditoria tab view inside the provided container
@@ -16,6 +16,12 @@ export async function renderAuditoriaTab(container, ctx) {
   let currentPage = 1;
   const pageSize = 25;
   const expandedRows = new Set();
+  const techDetailsExpanded = new Set();
+
+  // Lookup maps for Foreign Keys (in-memory per page)
+  let itemMap = new Map();     // id -> { name, unit }
+  let profileMap = new Map();  // id -> full_name
+  let batchMap = new Map();    // id -> lot_number
 
   container.innerHTML = `
     <div class="flex flex-col gap-lg">
@@ -167,6 +173,9 @@ export async function renderAuditoriaTab(container, ctx) {
       auditLogs = data || [];
       totalCount = count || 0;
 
+      // Bulk fetch names for foreign keys in auditLogs page
+      await fetchLookupsForPage();
+
       renderAuditMetrics();
       renderAuditTable();
       renderAuditPagination();
@@ -174,6 +183,151 @@ export async function renderAuditoriaTab(container, ctx) {
       console.error('Erro ao consultar vw_audit:', err);
       toast('Erro de conexão ao carregar auditoria.', 'error');
       tableContainer.innerHTML = emptyState('Erro de conexão ao carregar auditoria.');
+    }
+  }
+
+  /**
+   * Bulk fetches items, profiles, and batches names for the current page
+   */
+  async function fetchLookupsForPage() {
+    itemMap.clear();
+    profileMap.clear();
+    batchMap.clear();
+
+    const itemIds = new Set();
+    const profileIds = new Set();
+    const batchIds = new Set();
+
+    auditLogs.forEach(log => {
+      if (log.changed_by) profileIds.add(log.changed_by);
+
+      if (log.table_name === 'items' && log.record_id) itemIds.add(log.record_id);
+      if (log.table_name === 'profiles' && log.record_id) profileIds.add(log.record_id);
+      if (log.table_name === 'batches' && log.record_id) batchIds.add(log.record_id);
+
+      [log.old_data, log.new_data].forEach(data => {
+        if (!data) return;
+        if (data.item_id) itemIds.add(data.item_id);
+        if (data.requester_id) profileIds.add(data.requester_id);
+        if (data.approved_by) profileIds.add(data.approved_by);
+        if (data.performed_by) profileIds.add(data.performed_by);
+        if (data.changed_by) profileIds.add(data.changed_by);
+        if (data.received_by) profileIds.add(data.received_by);
+        if (data.batch_id) batchIds.add(data.batch_id);
+      });
+    });
+
+    const promises = [];
+
+    if (itemIds.size > 0) {
+      promises.push(
+        ctx.supabase
+          .from('items')
+          .select('id, name, unit')
+          .in('id', Array.from(itemIds))
+          .then(({ data }) => {
+            if (data) {
+              data.forEach(item => itemMap.set(item.id, { name: item.name, unit: item.unit || 'un' }));
+            }
+          })
+      );
+    }
+
+    if (profileIds.size > 0) {
+      promises.push(
+        ctx.supabase
+          .from('profiles')
+          .select('id, full_name')
+          .in('id', Array.from(profileIds))
+          .then(({ data }) => {
+            if (data) {
+              data.forEach(p => profileMap.set(p.id, p.full_name));
+            }
+          })
+      );
+    }
+
+    if (batchIds.size > 0) {
+      promises.push(
+        ctx.supabase
+          .from('batches')
+          .select('id, lot_number')
+          .in('id', Array.from(batchIds))
+          .then(({ data }) => {
+            if (data) {
+              data.forEach(b => batchMap.set(b.id, b.lot_number || 'Sem nº'));
+            }
+          })
+      );
+    }
+
+    await Promise.all(promises);
+  }
+
+  /**
+   * Helper to resolve item name or short code
+   */
+  function getItemName(id) {
+    if (!id) return '—';
+    const item = itemMap.get(id);
+    if (item) return item.name;
+    return typeof id === 'string' ? id.substring(0, 8) : String(id);
+  }
+
+  /**
+   * Helper to resolve item unit or 'un'
+   */
+  function getItemUnit(id) {
+    if (!id) return 'un';
+    const item = itemMap.get(id);
+    return item ? (item.unit || 'un') : 'un';
+  }
+
+  /**
+   * Helper to resolve profile name or short code
+   */
+  function getProfileName(id) {
+    if (!id) return '—';
+    const name = profileMap.get(id);
+    if (name) return name;
+    return typeof id === 'string' ? id.substring(0, 8) : String(id);
+  }
+
+  /**
+   * Helper to resolve batch number or short code
+   */
+  function getBatchNumber(id) {
+    if (!id) return '—';
+    const lot = batchMap.get(id);
+    if (lot) return lot;
+    return typeof id === 'string' ? id.substring(0, 8) : String(id);
+  }
+
+  /**
+   * Maps user roles to readable Portuguese string
+   */
+  function formatRole(role) {
+    switch (role) {
+      case 'solicitante': return 'Solicitante';
+      case 'almoxarife': return 'Almoxarife';
+      case 'gestor_ti': return 'Gestor de TI';
+      case 'diretoria': return 'Diretoria';
+      default: return role || '—';
+    }
+  }
+
+  /**
+   * Maps status string to readable title-case status
+   */
+  function formatStatusReadable(status) {
+    switch (status) {
+      case 'PENDENTE': return 'Pendente';
+      case 'APROVADO': return 'Aprovado';
+      case 'EM_SEPARACAO': return 'Em separação';
+      case 'ENTREGUE': return 'Entregue';
+      case 'REJEITADO': return 'Rejeitado';
+      case 'CANCELADO': return 'Cancelado';
+      default: return status || '—';
     }
   }
 
@@ -189,8 +343,6 @@ export async function renderAuditoriaTab(container, ctx) {
 
   /**
    * Formats database table name to human readable string
-   * @param {string} table
-   * @returns {string}
    */
   function formatTableName(table) {
     switch (table) {
@@ -204,8 +356,6 @@ export async function renderAuditoriaTab(container, ctx) {
 
   /**
    * Generates badge for action
-   * @param {string} action
-   * @returns {string}
    */
   function formatActionBadge(action) {
     const act = (action || '').toUpperCase();
@@ -220,55 +370,274 @@ export async function renderAuditoriaTab(container, ctx) {
   }
 
   /**
-   * Renders diff presentation for expanded row
-   * @param {Object} item
-   * @returns {string}
+   * Generates Portuguese non-technical summary string for main table row
    */
-  function renderDiffContent(item) {
-    const action = (item.action || '').toUpperCase();
+  function generateSummary(log) {
+    const table = log.table_name;
+    const action = (log.action || '').toUpperCase();
+    const oldD = log.old_data || {};
+    const newD = log.new_data || {};
 
-    if (action === 'INSERT') {
-      return `<div class="text-body-sm text-primary font-semibold">Novo registro incluído no sistema.</div>`;
+    if (table === 'requests') {
+      const itemId = newD.item_id || oldD.item_id;
+      const itemName = getItemName(itemId);
+      const qty = newD.quantity || oldD.quantity || 1;
+      const unit = getItemUnit(itemId);
+
+      if (action === 'INSERT') {
+        return `Novo pedido de ${itemName} (${qty} ${unit})`;
+      }
+      if (action === 'UPDATE') {
+        if (oldD.status && newD.status && oldD.status !== newD.status) {
+          return `Pedido de ${itemName}: ${formatStatusReadable(oldD.status)} → ${formatStatusReadable(newD.status)}`;
+        }
+        return `Pedido de ${itemName}: Alterado`;
+      }
+      if (action === 'DELETE') {
+        return `Pedido de ${itemName}: Excluído`;
+      }
     }
-    if (action === 'DELETE') {
-      return `<div class="text-body-sm text-danger font-semibold">Registro excluído do sistema.</div>`;
+
+    if (table === 'profiles') {
+      const personName = newD.full_name || oldD.full_name || getProfileName(log.record_id);
+      if (action === 'INSERT') {
+        return `Novo perfil de ${personName}`;
+      }
+      if (action === 'UPDATE') {
+        if (oldD.cost_center !== newD.cost_center && oldD.cost_center !== undefined) {
+          return `Perfil de ${personName}: Setor alterado`;
+        }
+        if (oldD.role !== newD.role && oldD.role !== undefined) {
+          return `Perfil de ${personName}: Perfil alterado`;
+        }
+        if (oldD.active !== newD.active && oldD.active !== undefined) {
+          return `Perfil de ${personName}: ${newD.active ? 'Ativado' : 'Desativado'}`;
+        }
+        return `Perfil de ${personName}: Dados alterados`;
+      }
+      if (action === 'DELETE') {
+        return `Perfil de ${personName}: Excluído`;
+      }
     }
 
-    if (action === 'UPDATE' && item.old_data && item.new_data) {
-      const oldData = item.old_data;
-      const newData = item.new_data;
+    if (table === 'stock_movements') {
+      const itemId = newD.item_id || oldD.item_id;
+      const itemName = getItemName(itemId);
+      const rawQty = newD.quantity !== undefined ? newD.quantity : oldD.quantity;
+      const qty = Math.abs(rawQty || 0);
+      const unit = getItemUnit(itemId);
+      const type = (newD.type || oldD.type || '').toUpperCase();
 
-      const allKeys = Array.from(new Set([...Object.keys(oldData), ...Object.keys(newData)]));
+      if (type === 'ENTRADA') return `Entrada de ${qty} ${unit} de ${itemName}`;
+      if (type === 'SAIDA') return `Saída de ${qty} ${unit} de ${itemName}`;
+      if (type === 'AJUSTE') return `Ajuste de ${qty} ${unit} de ${itemName}`;
+      if (type === 'DESCARTE') return `Descarte de ${qty} ${unit} de ${itemName}`;
+      return `Movimentação de ${itemName}`;
+    }
+
+    if (table === 'items') {
+      const itemName = newD.name || oldD.name || getItemName(log.record_id);
+      if (action === 'INSERT') return `Novo item: ${itemName}`;
+      if (action === 'UPDATE') {
+        if (oldD.active !== newD.active && oldD.active !== undefined) {
+          return `Item ${itemName}: ${newD.active ? 'Reativado' : 'Desativado'}`;
+        }
+        return `Item ${itemName}: Dados alterados`;
+      }
+      if (action === 'DELETE') return `Item ${itemName}: Excluído`;
+    }
+
+    return `${formatTableName(table)}: ${action}`;
+  }
+
+  /**
+   * Field label translations per table
+   */
+  function getFieldLabel(table, field) {
+    if (table === 'requests') {
+      switch (field) {
+        case 'status': return 'Status';
+        case 'quantity': return 'Quantidade';
+        case 'justification': return 'Justificativa';
+        case 'cost_center': return 'Setor';
+        case 'item_id': return 'Item';
+        case 'requester_id': return 'Solicitante';
+        case 'auto_approved': return 'Aprovação automática';
+        case 'approved_by': return 'Aprovado por';
+        case 'approved_at': return 'Aprovado em';
+        case 'reject_reason': return 'Motivo da rejeição';
+        case 'delivered_at': return 'Entregue em';
+        case 'created_at': return 'Criado em';
+      }
+    }
+
+    if (table === 'profiles') {
+      switch (field) {
+        case 'full_name': return 'Nome';
+        case 'role': return 'Perfil';
+        case 'cost_center': return 'Setor';
+        case 'active': return 'Ativo';
+        case 'created_at': return 'Criado em';
+      }
+    }
+
+    if (table === 'items') {
+      switch (field) {
+        case 'name': return 'Nome do Produto';
+        case 'sku': return 'Código SKU';
+        case 'description': return 'Descrição';
+        case 'category': return 'Categoria';
+        case 'unit': return 'Unidade de Medida';
+        case 'type': return 'Tipo do Item';
+        case 'location': return 'Localização';
+        case 'reorder_point': return 'Ponto de Reposição';
+        case 'requires_expiry': return 'Exige Validade';
+        case 'unit_price': return 'Preço Unitário';
+        case 'active': return 'Ativo';
+        case 'created_at': return 'Criado em';
+        case 'image_url': return 'URL da Imagem';
+      }
+    }
+
+    if (table === 'stock_movements') {
+      switch (field) {
+        case 'item_id': return 'Item';
+        case 'batch_id': return 'Lote';
+        case 'type': return 'Tipo de Movimentação';
+        case 'quantity': return 'Quantidade';
+        case 'request_id': return 'Pedido';
+        case 'note': return 'Motivo / Observação';
+        case 'performed_by': return 'Responsável';
+        case 'created_at': return 'Criado em';
+      }
+    }
+
+    return field;
+  }
+
+  /**
+   * Formats field values to readable strings or badges
+   */
+  function formatFieldValue(table, key, val) {
+    if (val === null || val === undefined || val === '') return '—';
+
+    // Booleans
+    if (typeof val === 'boolean') {
+      return val ? 'Sim' : 'Não';
+    }
+
+    // Role enum
+    if (key === 'role') {
+      return formatRole(val);
+    }
+
+    // Status enum (requests)
+    if (key === 'status') {
+      return statusBadge(val);
+    }
+
+    // Foreign keys
+    if (key === 'item_id') return esc(getItemName(val));
+    if (key === 'requester_id' || key === 'approved_by' || key === 'performed_by' || key === 'changed_by' || key === 'received_by') {
+      return esc(getProfileName(val));
+    }
+    if (key === 'batch_id') return esc(getBatchNumber(val));
+
+    // Currency
+    if (key === 'unit_price') {
+      return formatMoney(val);
+    }
+
+    // Dates
+    if (key === 'expires_on') {
+      return formatDate(val);
+    }
+    if (key === 'created_at' || key === 'updated_at' || key === 'approved_at' || key === 'delivered_at' || key === 'received_at') {
+      return formatDateTime(val);
+    }
+
+    if (typeof val === 'object') {
+      return esc(JSON.stringify(val));
+    }
+
+    return esc(String(val));
+  }
+
+  /**
+   * Renders expanded row details
+   */
+  function renderDetailsContent(log) {
+    const action = (log.action || '').toUpperCase();
+    const table = log.table_name;
+    const isTechExpanded = techDetailsExpanded.has(log.id);
+
+    let mainDetailsHtml = '';
+
+    if (action === 'UPDATE' && log.old_data && log.new_data) {
+      const oldData = log.old_data;
+      const newData = log.new_data;
+
+      // Filter out 'id' and 'updated_at' from change inspection (Rule 5)
+      const allKeys = Array.from(new Set([...Object.keys(oldData), ...Object.keys(newData)]))
+        .filter(k => k !== 'id' && k !== 'updated_at');
+
       const changedKeys = allKeys.filter(k => JSON.stringify(oldData[k]) !== JSON.stringify(newData[k]));
 
       if (changedKeys.length === 0) {
-        return `<div class="text-body-sm text-muted">Nenhum campo com alteração de valor detectado.</div>`;
-      }
-
-      return `
-        <div class="flex flex-col gap-xs mb-sm">
-          <div class="flex flex-wrap items-center gap-xs mb-xs">
-            <span class="text-label text-muted">Campos alterados (${changedKeys.length}):</span>
-            ${changedKeys.map(k => `<span class="changed-badge">${esc(k)}</span>`).join('')}
+        mainDetailsHtml = `<div class="text-body-sm text-muted">Nenhum campo com alteração de valor detectado.</div>`;
+      } else {
+        mainDetailsHtml = `
+          <div class="flex flex-col gap-xs mb-sm">
+            <h4 class="text-subheading mb-xs">O que mudou</h4>
+            <table class="diff-table">
+              <thead>
+                <tr>
+                  <th>Campo</th>
+                  <th>Antes</th>
+                  <th>Depois</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${changedKeys.map(k => {
+                  const oldValFormatted = formatFieldValue(table, k, oldData[k]);
+                  const newValFormatted = formatFieldValue(table, k, newData[k]);
+                  const label = getFieldLabel(table, k);
+                  return `
+                    <tr class="changed-row">
+                      <td class="font-semibold text-body">${esc(label)}</td>
+                      <td class="text-danger text-body">${oldValFormatted}</td>
+                      <td class="text-primary text-body font-semibold">${newValFormatted}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
           </div>
+        `;
+      }
+    } else {
+      // INSERT or DELETE or fallback
+      const dataObj = action === 'DELETE' ? (log.old_data || {}) : (log.new_data || log.old_data || {});
+      const keys = Object.keys(dataObj).filter(k => k !== 'id' && k !== 'updated_at');
 
+      mainDetailsHtml = `
+        <div class="flex flex-col gap-xs mb-sm">
+          <h4 class="text-subheading mb-xs">Dados do registro</h4>
           <table class="diff-table">
             <thead>
               <tr>
                 <th>Campo</th>
-                <th>Valor Antigo</th>
-                <th>Valor Novo</th>
+                <th>Valor</th>
               </tr>
             </thead>
             <tbody>
-              ${changedKeys.map(k => {
-                const oldVal = oldData[k] !== undefined ? (typeof oldData[k] === 'object' ? JSON.stringify(oldData[k]) : String(oldData[k])) : '-';
-                const newVal = newData[k] !== undefined ? (typeof newData[k] === 'object' ? JSON.stringify(newData[k]) : String(newData[k])) : '-';
+              ${keys.map(k => {
+                const valFormatted = formatFieldValue(table, k, dataObj[k]);
+                const label = getFieldLabel(table, k);
                 return `
-                  <tr class="changed-row">
-                    <td class="font-semibold code-text">${esc(k)}</td>
-                    <td class="text-danger code-text">${esc(oldVal)}</td>
-                    <td class="text-primary code-text font-semibold">${esc(newVal)}</td>
+                  <tr>
+                    <td class="font-semibold text-body">${esc(label)}</td>
+                    <td class="text-body">${valFormatted}</td>
                   </tr>
                 `;
               }).join('')}
@@ -278,7 +647,42 @@ export async function renderAuditoriaTab(container, ctx) {
       `;
     }
 
-    return '';
+    const techSectionHtml = `
+      <div class="mt-md pt-md border-t border-subtle">
+        <button type="button" class="btn btn-secondary btn-sm btn-toggle-tech-details" data-id="${log.id}">
+          <span class="material-symbols-outlined">${isTechExpanded ? 'terminal' : 'code'}</span>
+          ${isTechExpanded ? 'Ocultar dados técnicos' : 'Ver dados técnicos'}
+        </button>
+
+        ${isTechExpanded ? `
+          <div class="json-grid mt-md">
+            <div class="json-box">
+              <span class="text-label text-muted">ID do Registro (UUID)</span>
+              <div class="code-text text-body mt-xs mb-xs">${esc(log.record_id || '—')}</div>
+            </div>
+            <div class="json-box">
+              <span class="text-label text-muted">Tabela / Ação</span>
+              <div class="code-text text-body mt-xs mb-xs">${esc(log.table_name)} (${esc(log.action)})</div>
+            </div>
+            <div class="json-box">
+              <span class="text-label text-muted">Dados Anteriores (old_data)</span>
+              <pre class="code-json" id="old-json-${log.id}"></pre>
+            </div>
+            <div class="json-box">
+              <span class="text-label text-muted">Dados Novos (new_data)</span>
+              <pre class="code-json" id="new-json-${log.id}"></pre>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+
+    return `
+      <div class="audit-diff-container">
+        ${mainDetailsHtml}
+        ${techSectionHtml}
+      </div>
+    `;
   }
 
   /**
@@ -301,13 +705,14 @@ export async function renderAuditoriaTab(container, ctx) {
             <th>Usuário</th>
             <th>Tabela</th>
             <th>Ação</th>
-            <th>ID do Registro</th>
+            <th>Resumo</th>
             <th class="text-right">Detalhes</th>
           </tr>
         </thead>
         <tbody>
           ${auditLogs.map(item => {
             const isExpanded = expandedRows.has(item.id);
+            const summaryText = generateSummary(item);
             const mainRow = `
               <tr>
                 <td class="tabular-nums text-body font-semibold">
@@ -322,8 +727,8 @@ export async function renderAuditoriaTab(container, ctx) {
                 <td>
                   ${formatActionBadge(item.action)}
                 </td>
-                <td class="code-text text-muted" title="${esc(item.record_id || '')}">
-                  ${item.record_id ? esc(item.record_id.substring(0, 8)) : '-'}
+                <td class="text-body font-semibold text-dark">
+                  ${esc(summaryText)}
                 </td>
                 <td class="text-right">
                   <button type="button" class="btn btn-secondary btn-sm btn-toggle-audit-detail" data-id="${item.id}">
@@ -342,19 +747,7 @@ export async function renderAuditoriaTab(container, ctx) {
               ${mainRow}
               <tr class="audit-details-row">
                 <td colspan="6" class="audit-details-cell">
-                  <div class="audit-diff-container">
-                    ${renderDiffContent(item)}
-                    <div class="json-grid">
-                      <div class="json-box">
-                        <span class="text-label text-muted">Dados Anteriores (old_data)</span>
-                        <pre class="code-json" id="old-json-${item.id}"></pre>
-                      </div>
-                      <div class="json-box">
-                        <span class="text-label text-muted">Dados Novos (new_data)</span>
-                        <pre class="code-json" id="new-json-${item.id}"></pre>
-                      </div>
-                    </div>
-                  </div>
+                  ${renderDetailsContent(item)}
                 </td>
               </tr>
             `;
@@ -365,9 +758,9 @@ export async function renderAuditoriaTab(container, ctx) {
       </table>
     `;
 
-    // Safely set JSON content via textContent (R5)
+    // Safely set JSON content via textContent (R5) for expanded tech details
     auditLogs.forEach(item => {
-      if (expandedRows.has(item.id)) {
+      if (expandedRows.has(item.id) && techDetailsExpanded.has(item.id)) {
         const oldPre = container.querySelector(`#old-json-${item.id}`);
         const newPre = container.querySelector(`#new-json-${item.id}`);
         if (oldPre) {
@@ -503,7 +896,7 @@ export async function renderAuditoriaTab(container, ctx) {
   }
 
   /**
-   * Binds table expand row buttons
+   * Binds table expand row buttons and tech details buttons
    */
   function bindTableEvents() {
     const toggleBtns = container.querySelectorAll('.btn-toggle-audit-detail');
@@ -515,6 +908,20 @@ export async function renderAuditoriaTab(container, ctx) {
           expandedRows.delete(id);
         } else {
           expandedRows.add(id);
+        }
+        renderAuditTable();
+      });
+    });
+
+    const techBtns = container.querySelectorAll('.btn-toggle-tech-details');
+    techBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const rawId = e.currentTarget.getAttribute('data-id');
+        const id = isNaN(Number(rawId)) ? rawId : Number(rawId);
+        if (techDetailsExpanded.has(id)) {
+          techDetailsExpanded.delete(id);
+        } else {
+          techDetailsExpanded.add(id);
         }
         renderAuditTable();
       });
