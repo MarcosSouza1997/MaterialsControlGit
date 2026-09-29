@@ -696,7 +696,7 @@ body {
   }
 
   .table {
-    min-width: 600px;
+    min-width: 720px;
   }
 
   .table td, .table th {
@@ -707,8 +707,30 @@ body {
   .table td .text-body-sm,
   .table td.col-max-width-320 {
     white-space: normal;
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: manual;
+  }
+
+  /* Garante largura mínima para coluna/células de nome de produto/item e quebra de palavra limpa */
+  .table td:nth-child(2),
+  .table td:nth-child(3),
+  .table td .font-semibold {
+    min-width: 180px;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  /* SKU, códigos e monospaced em uma linha só */
+  .table td .font-mono,
+  .table td .code-text,
+  .table td .font-code,
+  .table td .catalog-sku-tag,
+  .font-mono,
+  .code-text,
+  .font-code {
+    white-space: nowrap !important;
   }
 
   /* Modals: 16px lateral margins, internal vertical scroll, fixed footer */
