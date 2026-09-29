@@ -173,7 +173,7 @@ export async function render(container, ctx) {
       </div> <!-- End #tab-content-consumo -->
 
       <!-- Content Container for Auditoria Tab -->
-      <div id="tab-content-auditoria" class="flex flex-col gap-lg" style="display: none;"></div>
+      <div id="tab-content-auditoria" class="flex flex-col gap-lg hidden"></div>
     </div>
   `;
 

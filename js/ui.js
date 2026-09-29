@@ -53,6 +53,8 @@ export function toast(msg, tipo = 'info', duration = 4000) {
  * @param {Array<{text: string, class?: string, onClick: (closeModal: () => void) => void}>} [options.actions]
  */
 export function openModal({ title, body, actions = [] }) {
+  const previousActiveElement = document.activeElement;
+
   const existingModal = document.querySelector('.modal-backdrop');
   if (existingModal) existingModal.remove();
 
@@ -78,6 +80,9 @@ export function openModal({ title, body, actions = [] }) {
     backdrop.classList.remove('active');
     setTimeout(() => backdrop.remove(), 200);
     document.removeEventListener('keydown', handleKeydown);
+    if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+      previousActiveElement.focus();
+    }
   };
 
   closeBtn.addEventListener('click', closeModal);

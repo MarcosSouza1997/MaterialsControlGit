@@ -391,7 +391,7 @@ export async function render(container, ctx) {
                       <span class="code-text">${esc(item.sku)}</span> • ${esc(categoryLabel)}
                     </div>
                   </div>
-                  <button type="button" class="btn-icon-danger btn-remove-item" data-id="${esc(item.id)}" title="Remover item">
+                  <button type="button" class="btn-icon-danger btn-remove-item" data-id="${esc(item.id)}" title="Remover item" aria-label="Remover item">
                     <span class="material-symbols-outlined">close</span>
                   </button>
                 </div>
@@ -399,11 +399,11 @@ export async function render(container, ctx) {
                 <div class="cart-item-footer">
                   <span class="text-body-sm text-muted">Qtd. Solicitada:</span>
                   <div class="cart-qty-control">
-                    <button type="button" class="btn-qty btn-dec-qty" data-id="${esc(item.id)}" ${item.quantity <= 1 ? 'disabled' : ''}>
+                    <button type="button" class="btn-qty btn-dec-qty" data-id="${esc(item.id)}" ${item.quantity <= 1 ? 'disabled' : ''} aria-label="Diminuir quantidade">
                       <span class="material-symbols-outlined">remove</span>
                     </button>
                     <span class="cart-qty-value">${item.quantity}</span>
-                    <button type="button" class="btn-qty btn-inc-qty" data-id="${esc(item.id)}" ${item.quantity >= avail ? 'disabled' : ''}>
+                    <button type="button" class="btn-qty btn-inc-qty" data-id="${esc(item.id)}" ${item.quantity >= avail ? 'disabled' : ''} aria-label="Aumentar quantidade">
                       <span class="material-symbols-outlined">add</span>
                     </button>
                   </div>

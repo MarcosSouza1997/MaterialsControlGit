@@ -83,7 +83,7 @@ export function initRouter(ctx) {
     if (!routeConfig.roles.includes(userRole)) {
       if (container) {
         container.innerHTML = `
-          <div class="card text-center" style="max-width: 500px; margin: 2rem auto;">
+          <div class="card text-center restricted-card">
             <div class="alert alert-danger mb-md">
               <span class="material-symbols-outlined">block</span>
               <div>
