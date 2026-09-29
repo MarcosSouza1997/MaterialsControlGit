@@ -1,4 +1,4 @@
-import { esc, toast, openModal, formatDate, formatDateTime, formatMoney, statusBadge, emptyState } from '../ui.js';
+import { esc, toast, openModal, formatDate, formatDateTime, formatMoney, statusBadge, emptyState, formatUnit } from '../ui.js';
 
 /**
  * Renders Central de Aprovações view (T-007)
@@ -19,6 +19,7 @@ export async function render(container, ctx) {
   let approvalQueue = [];
   let allRequests = [];
   let deliveryHistories = [];
+  let stockOverviewMap = new Map(); // item_id -> available_quantity
   let loading = true;
 
   // Render initial frame with loading state
@@ -50,6 +51,16 @@ export async function render(container, ctx) {
 
       if (reqError) throw reqError;
       allRequests = reqData || [];
+
+      // Fetch stock overview to get available_quantity in bulk for all items
+      const { data: stockData, error: stockError } = await supabase
+        .from('vw_stock_overview')
+        .select('id, available_quantity');
+
+      if (!stockError && stockData) {
+        stockOverviewMap.clear();
+        stockData.forEach(s => stockOverviewMap.set(s.id, s.available_quantity));
+      }
 
       // 3. Fetch delivery history for duplication alerts
       const { data: histData, error: histError } = await supabase
@@ -291,9 +302,14 @@ export async function render(container, ctx) {
     const requesterName = r.requester_name || 'Solicitante';
     const costCenter = r.cost_center || r.requester_cost_center || '-';
 
-    // Stock quantity (if available from approval queue view, or default to '-')
-    const stockQty = r.stock_quantity !== undefined && r.stock_quantity !== null
-      ? `${r.stock_quantity} ${esc(r.item_unit || 'un')}`
+    // Stock quantity (if available from approval queue view, or look up from stockOverviewMap)
+    let availableQty = r.stock_quantity;
+    if ((availableQty === undefined || availableQty === null) && r.item_id && stockOverviewMap.has(r.item_id)) {
+      availableQty = stockOverviewMap.get(r.item_id);
+    }
+
+    const stockQty = availableQty !== undefined && availableQty !== null
+      ? formatUnit(availableQty, r.item_unit)
       : '-';
 
     const hasDuplicateAlert = r.recent_delivery_days !== undefined && r.recent_delivery_days !== null;

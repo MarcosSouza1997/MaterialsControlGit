@@ -134,6 +134,63 @@ export function openModal({ title, body, actions = [] }) {
 }
 
 /**
+ * Formats quantity and unit name with singular / plural rules:
+ * un -> unidade / unidades
+ * cx -> caixa / caixas
+ * pct -> pacote / pacotes
+ * rl -> resma / resmas
+ * lt -> litro / litros
+ * kg -> kg
+ * @param {number} quantidade
+ * @param {string} unidade
+ * @returns {string}
+ */
+export function formatUnit(quantidade, unidade) {
+  const amount = Number(quantidade) || 0;
+  const isSingular = Math.abs(amount) === 1;
+  const u = (unidade || 'un').toLowerCase().trim();
+
+  let name = '';
+  switch (u) {
+    case 'un':
+    case 'unidade':
+    case 'unidades':
+      name = isSingular ? 'unidade' : 'unidades';
+      break;
+    case 'cx':
+    case 'caixa':
+    case 'caixas':
+      name = isSingular ? 'caixa' : 'caixas';
+      break;
+    case 'pct':
+    case 'pacote':
+    case 'pacotes':
+      name = isSingular ? 'pacote' : 'pacotes';
+      break;
+    case 'rl':
+    case 'resma':
+    case 'resmas':
+      name = isSingular ? 'resma' : 'resmas';
+      break;
+    case 'lt':
+    case 'litro':
+    case 'litros':
+      name = isSingular ? 'litro' : 'litros';
+      break;
+    case 'kg':
+    case 'quilo':
+    case 'quilos':
+      name = 'kg';
+      break;
+    default:
+      name = u;
+      break;
+  }
+
+  return `${amount} ${name}`;
+}
+
+/**
  * Formats date string to dd/mm/aaaa
  * @param {string|Date} dateVal
  * @returns {string}

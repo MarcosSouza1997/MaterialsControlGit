@@ -888,6 +888,11 @@ body {
   color: var(--color-brand-primary);
 }
 
+.catalog-card-image.hidden,
+.catalog-card-icon-fallback.hidden {
+  display: none !important;
+}
+
 .catalog-card-icon-fallback span {
   font-size: 48px;
 }

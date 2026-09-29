@@ -1,4 +1,4 @@
-import { esc, formatDate, formatDateTime, formatMoney, statusBadge, emptyState, toast } from '../ui.js';
+import { esc, formatDate, formatDateTime, formatMoney, statusBadge, emptyState, toast, formatUnit } from '../ui.js';
 
 /**
  * Renders the role-based Dashboard view
@@ -156,7 +156,7 @@ async function renderSolicitanteDashboard(container, ctx) {
                         <div class="text-body-sm">${esc(r.item_sku)}</div>
                       </div>
                     </td>
-                    <td class="tabular-nums">${r.quantity} ${esc(r.item_unit || 'un')}</td>
+                    <td class="tabular-nums">${esc(formatUnit(r.quantity, r.item_unit))}</td>
                     <td class="text-body-sm">${formatDateTime(r.created_at)}</td>
                     <td>${statusBadge(r.status)}</td>
                   </tr>
@@ -331,12 +331,12 @@ async function renderGestaoDashboard(container, ctx) {
 
           <div class="chart-footer">
             <div>
-              <span class="text-body-sm">Valor Consumido este mês:</span>
-              <strong class="text-heading text-primary ml-xs">${formatMoney(monthlyChartData.currentMonthValue)}</strong>
+              <span class="text-body-sm">Saídas no mês:</span>
+              <strong class="text-heading text-primary ml-xs">${monthlyChartData.currentMonthExits}</strong>
             </div>
             <div>
-              <span class="text-body-sm">Volume Consumido este mês:</span>
-              <strong class="text-heading ml-xs">${monthlyChartData.currentMonthQty} un</strong>
+              <span class="text-body-sm">Itens distintos:</span>
+              <strong class="text-heading ml-xs">${monthlyChartData.currentMonthDistinctItems}</strong>
             </div>
           </div>
         </article>
@@ -487,6 +487,8 @@ function prepareMonthlyConsumptionData(consumptionList) {
 
   let currentMonthValue = 0;
   let currentMonthQty = 0;
+  let currentMonthExits = 0;
+  const currentMonthItemSet = new Set();
   const currentKey = months[months.length - 1].key;
 
   consumptionList.forEach(c => {
@@ -512,13 +514,19 @@ function prepareMonthlyConsumptionData(consumptionList) {
     if (key === currentKey) {
       currentMonthValue += Number(c.value || 0);
       currentMonthQty += Number(c.quantity || 0);
+      currentMonthExits += 1;
+      if (c.item_id) {
+        currentMonthItemSet.add(c.item_id);
+      }
     }
   });
 
   return {
     months,
     currentMonthValue,
-    currentMonthQty
+    currentMonthQty,
+    currentMonthExits,
+    currentMonthDistinctItems: currentMonthItemSet.size
   };
 }
 
