@@ -1,4 +1,4 @@
-import { esc, toast, emptyState } from '../ui.js';
+import { esc, toast, emptyState, formatUnit } from '../ui.js';
 import { getItems, addItem, removeItem, setQuantity, clear, subscribe } from './cart.js';
 
 /**
@@ -41,15 +41,6 @@ function formatCategoryLabel(category) {
  * @param {string} unit
  * @returns {string}
  */
-function formatAvailableStock(qty, unit) {
-  const amount = Number(qty) || 0;
-  const u = (unit || 'un').toLowerCase();
-  if (u === 'un' || u === 'unidade') {
-    const unitStr = amount === 1 ? 'unidade' : 'unidades';
-    return `${amount} ${unitStr}`;
-  }
-  return `${amount} ${u}`;
-}
 
 /**
  * Renders Catálogo & Requisição view
@@ -62,6 +53,7 @@ export async function render(container, ctx) {
   let currentCostCenter = (ctx.profile && ctx.profile.cost_center) ? ctx.profile.cost_center : '';
   let currentJustification = '';
   let costCentersList = [];
+  let costCentersError = false;
 
   // Fetch cost_centers list from Supabase
   try {
@@ -70,11 +62,20 @@ export async function render(container, ctx) {
       .select('*')
       .order('name', { ascending: true });
 
-    if (!ccError && ccData) {
+    if (ccError) {
+      costCentersError = true;
+      if (ccError.code === '42501') {
+        toast('Você não tem permissão para esta ação.', 'error');
+      } else {
+        toast(ccError.message || 'Erro ao carregar setores.', 'error');
+      }
+    } else if (ccData) {
       costCentersList = ccData;
     }
   } catch (err) {
     console.error('Erro ao buscar cost_centers:', err);
+    costCentersError = true;
+    toast('Erro de conexão ao carregar setores.', 'error');
   }
 
   // Render main layout structure
@@ -226,6 +227,21 @@ export async function render(container, ctx) {
       </div>
     `;
 
+    // Bind image error handlers
+    contentEl.querySelectorAll('.catalog-card-image').forEach(img => {
+      img.addEventListener('error', (e) => {
+        const imageEl = e.currentTarget;
+        imageEl.classList.add('hidden');
+        const wrapper = imageEl.closest('.catalog-card-image-wrapper');
+        if (wrapper) {
+          const fallback = wrapper.querySelector('.catalog-card-icon-fallback');
+          if (fallback) {
+            fallback.classList.remove('hidden');
+          }
+        }
+      });
+    });
+
     // Bind event listeners for card action buttons
     contentEl.querySelectorAll('.btn-add-request').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -248,7 +264,7 @@ export async function render(container, ctx) {
     const isOutOfStock = availableQty <= 0;
     const iconName = getCategoryIcon(item.category);
     const categoryLabel = formatCategoryLabel(item.category);
-    const stockText = formatAvailableStock(availableQty, item.unit);
+    const stockText = formatUnit(availableQty, item.unit);
 
     let imageMediaHtml = '';
     if (item.image_url) {
@@ -258,9 +274,8 @@ export async function render(container, ctx) {
             src="${esc(item.image_url)}"
             alt="${esc(item.name)}"
             class="catalog-card-image"
-            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
           />
-          <div class="catalog-card-icon-fallback" style="display: none;">
+          <div class="catalog-card-icon-fallback hidden">
             <span class="material-symbols-outlined">${esc(iconName)}</span>
           </div>
         </div>
@@ -448,8 +463,11 @@ export async function render(container, ctx) {
             id="cart-cost-center"
             class="form-select"
             required
+            ${costCentersError ? 'disabled' : ''}
           >
-            <option value="" ${!currentCostCenter ? 'selected' : ''} disabled>Selecione o setor...</option>
+            <option value="" ${!currentCostCenter ? 'selected' : ''} disabled>
+              ${costCentersError ? 'Erro ao carregar setores' : 'Selecione o setor...'}
+            </option>
             ${costCentersList.map(cc => {
               const ccName = typeof cc === 'object' ? (cc.name || cc.code || '') : String(cc);
               const isSelected = currentCostCenter && currentCostCenter.toLowerCase() === ccName.toLowerCase();

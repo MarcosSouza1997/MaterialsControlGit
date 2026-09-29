@@ -1,4 +1,4 @@
-import { esc, toast, emptyState, openModal, formatDate, formatDateTime, formatMoney, statusBadge, paginate } from '../ui.js';
+import { esc, toast, emptyState, openModal, formatDate, formatDateTime, formatMoney, statusBadge, paginate, formatUnit } from '../ui.js';
 
 /**
  * Returns Material Symbol icon for category
@@ -397,10 +397,10 @@ export async function render(container, ctx) {
 
             let qtyDisplay = '';
             if (isZero) {
-              qtyDisplay = `<span class="text-danger font-semibold tabular-nums">0 ${esc(item.unit || 'un')}</span>`;
+              qtyDisplay = `<span class="text-danger font-semibold tabular-nums">${esc(formatUnit(0, item.unit))}</span>`;
             } else {
               const colorClass = isNormal ? 'text-body font-semibold tabular-nums' : 'text-danger font-semibold tabular-nums';
-              qtyDisplay = `<span class="${colorClass}">${qty} ${esc(item.unit || 'un')}</span>`;
+              qtyDisplay = `<span class="${colorClass}">${esc(formatUnit(qty, item.unit))}</span>`;
             }
 
             if (expiredQty > 0) {
@@ -433,7 +433,7 @@ export async function render(container, ctx) {
                   ${qtyDisplay}
                 </td>
                 <td class="text-center code-text text-muted">
-                  ${item.reorder_point || 0} ${esc(item.unit || 'un')}
+                  ${esc(formatUnit(item.reorder_point || 0, item.unit))}
                 </td>
                 <td class="text-body-sm text-muted">
                   ${formatDate(item.next_expiry)}
@@ -1392,7 +1392,7 @@ export async function render(container, ctx) {
                     <td class="code-text font-semibold">${esc(b.lot_number || 'Sem lote')}</td>
                     <td class="text-body-sm text-muted">${formatDate(b.received_at)}</td>
                     <td class="text-body-sm">${expiresHtml}</td>
-                    <td class="text-center font-semibold tabular-nums">${b.quantity_remaining} ${esc(item.unit || 'un')}</td>
+                    <td class="text-center font-semibold tabular-nums">${esc(formatUnit(b.quantity_remaining, item.unit))}</td>
                     <td class="text-right">
                       <button
                         type="button"
@@ -1451,7 +1451,7 @@ export async function render(container, ctx) {
     formEl.innerHTML = `
       <div class="text-body-sm text-muted">
         Lote: <strong>${esc(batch.lot_number || 'Sem lote')}</strong> — Item: <strong>${esc(item.name)}</strong><br>
-        Saldo restante no lote: <strong>${batch.quantity_remaining} ${esc(item.unit || 'un')}</strong>
+        Saldo restante no lote: <strong>${esc(formatUnit(batch.quantity_remaining, item.unit))}</strong>
       </div>
 
       <div class="form-group mb-xs">

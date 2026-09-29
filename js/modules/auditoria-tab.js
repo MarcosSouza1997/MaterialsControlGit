@@ -1,4 +1,4 @@
-import { esc, toast, emptyState, formatDate, formatDateTime, formatMoney, statusBadge } from '../ui.js';
+import { esc, toast, emptyState, formatDate, formatDateTime, formatMoney, statusBadge, formatUnit } from '../ui.js';
 
 /**
  * Renders the Auditoria tab view inside the provided container
@@ -385,7 +385,7 @@ export async function renderAuditoriaTab(container, ctx) {
       const unit = getItemUnit(itemId);
 
       if (action === 'INSERT') {
-        return `Novo pedido de ${itemName} (${qty} ${unit})`;
+        return `Novo pedido de ${itemName} (${formatUnit(qty, unit)})`;
       }
       if (action === 'UPDATE') {
         if (oldD.status && newD.status && oldD.status !== newD.status) {
@@ -428,10 +428,10 @@ export async function renderAuditoriaTab(container, ctx) {
       const unit = getItemUnit(itemId);
       const type = (newD.type || oldD.type || '').toUpperCase();
 
-      if (type === 'ENTRADA') return `Entrada de ${qty} ${unit} de ${itemName}`;
-      if (type === 'SAIDA') return `Saída de ${qty} ${unit} de ${itemName}`;
-      if (type === 'AJUSTE') return `Ajuste de ${qty} ${unit} de ${itemName}`;
-      if (type === 'DESCARTE') return `Descarte de ${qty} ${unit} de ${itemName}`;
+      if (type === 'ENTRADA') return `Entrada de ${formatUnit(qty, unit)} de ${itemName}`;
+      if (type === 'SAIDA') return `Saída de ${formatUnit(qty, unit)} de ${itemName}`;
+      if (type === 'AJUSTE') return `Ajuste de ${formatUnit(qty, unit)} de ${itemName}`;
+      if (type === 'DESCARTE') return `Descarte de ${formatUnit(qty, unit)} de ${itemName}`;
       return `Movimentação de ${itemName}`;
     }
 
@@ -518,7 +518,13 @@ export async function renderAuditoriaTab(container, ctx) {
   /**
    * Formats field values to readable strings or badges
    */
-  function formatFieldValue(table, key, val) {
+  function formatFieldValue(table, key, val, rowObj = {}) {
+    if (key === 'approved_by') {
+      if (rowObj && rowObj.auto_approved === true) {
+        return 'Sistema (aprovação automática)';
+      }
+    }
+
     if (val === null || val === undefined || val === '') return '—';
 
     // Booleans
@@ -599,8 +605,8 @@ export async function renderAuditoriaTab(container, ctx) {
               </thead>
               <tbody>
                 ${changedKeys.map(k => {
-                  const oldValFormatted = formatFieldValue(table, k, oldData[k]);
-                  const newValFormatted = formatFieldValue(table, k, newData[k]);
+                  const oldValFormatted = formatFieldValue(table, k, oldData[k], oldData);
+                  const newValFormatted = formatFieldValue(table, k, newData[k], newData);
                   const label = getFieldLabel(table, k);
                   return `
                     <tr class="changed-row">
@@ -632,7 +638,7 @@ export async function renderAuditoriaTab(container, ctx) {
             </thead>
             <tbody>
               ${keys.map(k => {
-                const valFormatted = formatFieldValue(table, k, dataObj[k]);
+                const valFormatted = formatFieldValue(table, k, dataObj[k], dataObj);
                 const label = getFieldLabel(table, k);
                 return `
                   <tr>

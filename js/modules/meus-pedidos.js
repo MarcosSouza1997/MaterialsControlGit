@@ -1,4 +1,4 @@
-import { esc, toast, statusBadge, emptyState, formatDate, formatDateTime, openModal } from '../ui.js';
+import { esc, toast, statusBadge, emptyState, formatDate, formatDateTime, openModal, formatUnit } from '../ui.js';
 
 /**
  * Truncates string if longer than maxLen
@@ -10,18 +10,6 @@ function truncate(str, maxLen = 50) {
   if (!str) return '';
   if (str.length <= maxLen) return str;
   return str.slice(0, maxLen) + '...';
-}
-
-/**
- * Formats item quantity and unit
- * @param {number} qty
- * @param {string} unit
- * @returns {string}
- */
-function formatQty(qty, unit) {
-  const amount = Number(qty) || 0;
-  const u = (unit || 'un').toLowerCase();
-  return `${amount} ${u}`;
 }
 
 /**
@@ -171,9 +159,13 @@ export async function render(container, ctx) {
     });
 
     if (filtered.length === 0) {
+      const emptyMsg = currentStatusFilter === 'ALL'
+        ? 'Você ainda não fez pedidos'
+        : 'Nenhum pedido encontrado nesta categoria.';
+
       cardContainer.innerHTML = `
         <div class="p-2xl text-center">
-          ${emptyState('Nenhum pedido encontrado nesta categoria.')}
+          ${emptyState(emptyMsg)}
           <div class="mt-lg">
             <a href="#catalogo" class="btn btn-primary">
               <span class="material-symbols-outlined">shopping_bag</span>
@@ -307,7 +299,7 @@ export async function render(container, ctx) {
           <div class="text-body-sm text-muted">SKU: <span class="code-text">${esc(r.item_sku || '-')}</span></div>
         </td>
         <td class="text-center font-semibold text-body-sm">
-          ${esc(formatQty(r.quantity, r.item_unit))}
+          ${esc(formatUnit(r.quantity, r.item_unit))}
         </td>
         <td>
           ${statusBadge(r.status)}
