@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Frasco de álcool 70%">
-<rect width="400" height="400" fill="#F4F7F9"/><circle cx="200" cy="200" r="150" fill="#E6EEF3"/> <ellipse cx="200" cy="318" rx="130" ry="14" fill="#003459" opacity="0.12"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-label="Frasco de álcool 70%">
+<rect width="800" height="300" fill="#F4F7F9"/>
+<g transform="translate(264 21) scale(0.68)">
+<circle cx="200" cy="200" r="150" fill="#E6EEF3"/> <ellipse cx="200" cy="318" rx="130" ry="14" fill="#003459" opacity="0.12"/>
 <rect x="175" y="62" width="50" height="32" rx="6" fill="#007EA7"/>
 <rect x="170" y="88" width="60" height="14" rx="4" fill="#003459"/>
 <path d="M180 102 L220 102 L220 118 C 220 130, 265 140, 265 170 L265 300 C 265 310, 258 316, 250 316 L150 316 C 142 316, 135 310, 135 300 L135 170 C 135 140, 180 130, 180 118 Z" fill="#FFFFFF" stroke="#003459" stroke-width="3"/>
@@ -7,4 +9,5 @@
 <rect x="145" y="175" width="110" height="80" rx="6" fill="#003459"/>
 <text x="200" y="208" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#FFFFFF" text-anchor="middle">ÁLCOOL</text>
 <text x="200" y="240" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800" fill="#00A8E8" text-anchor="middle">70%</text>
+</g>
 </svg>

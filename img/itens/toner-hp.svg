@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Cartucho de toner">
-<rect width="400" height="400" fill="#F4F7F9"/><circle cx="200" cy="200" r="150" fill="#E6EEF3"/> <ellipse cx="200" cy="318" rx="130" ry="14" fill="#003459" opacity="0.12"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-label="Cartucho de toner">
+<rect width="800" height="300" fill="#F4F7F9"/>
+<g transform="translate(264 21) scale(0.68)">
+<circle cx="200" cy="200" r="150" fill="#E6EEF3"/> <ellipse cx="200" cy="318" rx="130" ry="14" fill="#003459" opacity="0.12"/>
 <path d="M70 200 L110 150 L320 150 L335 175 L335 290 L70 290 Z" fill="#2B3238"/>
 <path d="M110 150 L320 150 L335 175 L95 175 Z" fill="#4A545C"/>
 <rect x="70" y="175" width="265" height="20" fill="#3A434A"/>
@@ -9,4 +11,5 @@
 <text x="180" y="235" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#003459" text-anchor="middle">85A</text>
 <rect x="255" y="210" width="56" height="34" rx="4" fill="#007EA7"/>
 <circle cx="283" cy="227" r="9" fill="#00A8E8"/>
+</g>
 </svg>
