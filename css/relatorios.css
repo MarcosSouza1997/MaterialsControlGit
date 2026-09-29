@@ -180,7 +180,7 @@
   line-height: 1.25rem;
   color: var(--color-brand-dark);
   white-space: pre-wrap;
-  word-break: break-all;
+    word-break: break-all;
   margin: 0;
   max-height: 300px;
   overflow-y: auto;
@@ -269,8 +269,6 @@
   }
 
   .diff-table {
-    display: block;
-    overflow-x: auto;
-    max-width: 100%;
+    min-width: 720px;
   }
 }
