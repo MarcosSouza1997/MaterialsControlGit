@@ -205,15 +205,15 @@ export async function render(container, ctx) {
       tabConsumo.addEventListener('click', () => {
         tabConsumo.classList.add('active');
         tabAuditoria.classList.remove('active');
-        if (contentConsumo) contentConsumo.style.display = 'flex';
-        if (contentAuditoria) contentAuditoria.style.display = 'none';
+        if (contentConsumo) contentConsumo.classList.remove('hidden');
+        if (contentAuditoria) contentAuditoria.classList.add('hidden');
       });
 
       tabAuditoria.addEventListener('click', async () => {
         tabAuditoria.classList.add('active');
         tabConsumo.classList.remove('active');
-        if (contentConsumo) contentConsumo.style.display = 'none';
-        if (contentAuditoria) contentAuditoria.style.display = 'flex';
+        if (contentConsumo) contentConsumo.classList.add('hidden');
+        if (contentAuditoria) contentAuditoria.classList.remove('hidden');
 
         if (!auditoriaInitialized) {
           auditoriaInitialized = true;
