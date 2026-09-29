@@ -56,7 +56,7 @@ export async function render(container, ctx) {
           <span class="metric-label text-overline">Total de Usuários</span>
           <span class="metric-value" id="metric-total">--</span>
         </div>
-        <div class="card card-metric" style="border-left: 4px solid var(--color-warning);">
+        <div class="card card-metric card-warning-border-left">
           <span class="metric-label text-overline">Aguardando Ativação</span>
           <span class="metric-value text-danger" id="metric-pending">--</span>
         </div>
@@ -87,7 +87,7 @@ export async function render(container, ctx) {
           <div class="usuarios-filter-group">
             <div class="flex items-center gap-xs">
               <label for="user-role-filter" class="form-label text-body-sm mb-0">Perfil:</label>
-              <select id="user-role-filter" class="form-select" style="width: auto; min-width: 140px;">
+              <select id="user-role-filter" class="form-select select-auto-width">
                 <option value="ALL">Todos os perfis</option>
                 <option value="solicitante">Solicitante</option>
                 <option value="almoxarife">Almoxarife</option>
@@ -98,7 +98,7 @@ export async function render(container, ctx) {
 
             <div class="flex items-center gap-xs">
               <label for="user-status-filter" class="form-label text-body-sm mb-0">Situação:</label>
-              <select id="user-status-filter" class="form-select" style="width: auto; min-width: 160px;">
+              <select id="user-status-filter" class="form-select select-auto-width-lg">
                 <option value="ALL">Todas as situações</option>
                 <option value="PENDING">Aguardando ativação</option>
                 <option value="ACTIVE">Ativo</option>
@@ -260,7 +260,7 @@ export async function render(container, ctx) {
               return `
                 <tr class="${rowClass}">
                   <td>
-                    <div class="font-semibold text-subheading" style="font-size: 0.875rem;">
+                    <div class="font-semibold text-subheading text-size-sm">
                       ${esc(user.full_name)}
                       ${isSelf ? '<span class="text-body-sm text-primary font-semibold ml-xs">(Você)</span>' : ''}
                     </div>

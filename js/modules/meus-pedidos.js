@@ -274,7 +274,7 @@ export async function render(container, ctx) {
         <div class="text-body-sm mb-2xs" title="${fullJustification}">
           <strong>Justificativa:</strong> ${esc(truncatedJustification)}
         </div>
-        <div class="text-body-sm text-danger font-semibold p-xs border-radius-sm" style="background-color: var(--color-danger-bg); border: 1px solid var(--color-danger-border);" title="${esc(r.reject_reason)}">
+        <div class="text-body-sm text-danger font-semibold p-xs border-radius-sm reject-reason-box" title="${esc(r.reject_reason)}">
           <strong>Motivo da Rejeição:</strong> ${esc(r.reject_reason)}
         </div>
       `;
@@ -304,7 +304,7 @@ export async function render(container, ctx) {
         <td>
           ${statusBadge(r.status)}
         </td>
-        <td style="max-width: 320px;">
+        <td class="col-max-width-320">
           ${detailHtml}
         </td>
         <td class="text-right">

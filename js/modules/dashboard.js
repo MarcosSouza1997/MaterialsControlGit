@@ -390,7 +390,7 @@ async function renderGestaoDashboard(container, ctx) {
                     case 'ENTRADA':
                       typeBadge = `
                         <span class="inline-flex items-center gap-2xs font-semibold text-primary">
-                          <span class="material-symbols-outlined" style="font-size: 16px;">add_circle</span>
+                          <span class="material-symbols-outlined icon-16">add_circle</span>
                           Entrada
                         </span>
                       `;
@@ -399,7 +399,7 @@ async function renderGestaoDashboard(container, ctx) {
                     case 'SAIDA':
                       typeBadge = `
                         <span class="inline-flex items-center gap-2xs font-semibold text-body">
-                          <span class="material-symbols-outlined" style="font-size: 16px;">remove_circle_outline</span>
+                          <span class="material-symbols-outlined icon-16">remove_circle_outline</span>
                           Saída
                         </span>
                       `;
@@ -408,7 +408,7 @@ async function renderGestaoDashboard(container, ctx) {
                     case 'AJUSTE':
                       typeBadge = `
                         <span class="inline-flex items-center gap-2xs font-semibold text-warning">
-                          <span class="material-symbols-outlined" style="font-size: 16px;">tune</span>
+                          <span class="material-symbols-outlined icon-16">tune</span>
                           Ajuste
                         </span>
                       `;
@@ -423,7 +423,7 @@ async function renderGestaoDashboard(container, ctx) {
                     case 'DESCARTE':
                       typeBadge = `
                         <span class="inline-flex items-center gap-2xs font-semibold text-danger">
-                          <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                          <span class="material-symbols-outlined icon-16">delete</span>
                           Descarte
                         </span>
                       `;

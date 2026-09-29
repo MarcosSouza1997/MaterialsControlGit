@@ -51,6 +51,15 @@
       padding: var(--space-lg) var(--space-xl);
       border-top: 1px solid rgba(226, 232, 240, 0.1);
     }
+
+    .btn-logout-sidebar {
+      color: var(--color-brand-white);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-logout-sidebar:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
   </style>
 
   <!-- Supabase JS v2 CDN -->
@@ -59,8 +68,11 @@
 <body>
 
   <div class="app-layout">
+    <!-- Overlay for mobile drawer -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
     <!-- Sidebar Navigation -->
-    <aside class="sidebar">
+    <aside id="sidebar-drawer" class="sidebar">
       <div class="sidebar-header">
         <span class="material-symbols-outlined brand-logo-icon">inventory_2</span>
         <span class="brand-title">Materials Control</span>
@@ -71,7 +83,7 @@
       </nav>
 
       <div class="sidebar-footer">
-        <button type="button" id="btn-logout" class="btn btn-secondary btn-sm w-full" style="color: var(--color-brand-white); border-color: rgba(255,255,255,0.3);">
+        <button type="button" id="btn-logout" class="btn btn-secondary btn-sm w-full btn-logout-sidebar">
           <span class="material-symbols-outlined">logout</span>
           Sair
         </button>
@@ -82,8 +94,13 @@
     <div class="main-content">
       <!-- Topbar Header -->
       <header class="topbar">
-        <div id="topbar-breadcrumb" class="text-body-sm font-semibold text-muted">
-          Materiais e Suprimentos / Dashboard
+        <div class="flex items-center gap-md">
+          <button type="button" id="btn-menu-toggle" class="btn-menu-toggle" aria-label="Abrir menu">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+          <div id="topbar-breadcrumb" class="text-body-sm font-semibold text-muted">
+            Materiais e Suprimentos / Dashboard
+          </div>
         </div>
 
         <div class="flex items-center gap-md">
@@ -181,7 +198,54 @@
         });
       }
 
-      // 5. Initialize application router with context
+      // 5. Setup sidebar drawer responsive behavior
+      const sidebarDrawer = document.getElementById('sidebar-drawer');
+      const sidebarOverlay = document.getElementById('sidebar-overlay');
+      const btnMenuToggle = document.getElementById('btn-menu-toggle');
+
+      function closeDrawer() {
+        if (sidebarDrawer) sidebarDrawer.classList.remove('open');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+      }
+
+      function openDrawer() {
+        if (sidebarDrawer) sidebarDrawer.classList.add('open');
+        if (sidebarOverlay) sidebarOverlay.classList.add('active');
+      }
+
+      if (btnMenuToggle) {
+        btnMenuToggle.addEventListener('click', () => {
+          if (sidebarDrawer && sidebarDrawer.classList.contains('open')) {
+            closeDrawer();
+          } else {
+            openDrawer();
+          }
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeDrawer);
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebarDrawer && sidebarDrawer.classList.contains('open')) {
+          closeDrawer();
+        }
+      });
+
+      // Close drawer when navigating to a new route
+      window.addEventListener('hashchange', closeDrawer);
+
+      // Close drawer when clicking a navigation link inside sidebar
+      if (navContainer) {
+        navContainer.addEventListener('click', (e) => {
+          if (e.target.closest('a')) {
+            closeDrawer();
+          }
+        });
+      }
+
+      // 6. Initialize application router with context
       const ctx = {
         profile,
         supabase

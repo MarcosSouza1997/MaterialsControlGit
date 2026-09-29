@@ -414,7 +414,7 @@ export async function render(container, ctx) {
                 </td>
                 <td>
                   <div class="flex items-center gap-sm">
-                    <span class="material-symbols-outlined text-muted" style="font-size: 20px;">
+                    <span class="material-symbols-outlined text-muted icon-20">
                       ${esc(iconName)}
                     </span>
                     <div class="flex flex-col">
@@ -705,10 +705,10 @@ export async function render(container, ctx) {
         <input
           type="checkbox"
           id="item-requires-expiry"
-          style="width: 18px; height: 18px; cursor: pointer;"
+          class="cursor-pointer"
           ${existingItem?.requires_expiry ? 'checked' : ''}
         />
-        <label for="item-requires-expiry" class="form-label" style="cursor: pointer; margin-bottom: 0;">
+        <label for="item-requires-expiry" class="form-label cursor-pointer mb-0">
           Exige controle de validade nos lotes
         </label>
       </div>
@@ -914,7 +914,7 @@ export async function render(container, ctx) {
               case 'ENTRADA':
                 typeBadge = `
                   <span class="inline-flex items-center gap-2xs font-semibold text-primary">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">add_circle</span>
+                    <span class="material-symbols-outlined icon-16">add_circle</span>
                     Entrada
                   </span>
                 `;
@@ -923,7 +923,7 @@ export async function render(container, ctx) {
               case 'SAIDA':
                 typeBadge = `
                   <span class="inline-flex items-center gap-2xs font-semibold text-body">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">remove_circle_outline</span>
+                    <span class="material-symbols-outlined icon-16">remove_circle_outline</span>
                     Saída
                   </span>
                 `;
@@ -932,7 +932,7 @@ export async function render(container, ctx) {
               case 'AJUSTE':
                 typeBadge = `
                   <span class="inline-flex items-center gap-2xs font-semibold text-warning">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">tune</span>
+                    <span class="material-symbols-outlined icon-16">tune</span>
                     Ajuste
                   </span>
                 `;
@@ -943,7 +943,7 @@ export async function render(container, ctx) {
               case 'DESCARTE':
                 typeBadge = `
                   <span class="inline-flex items-center gap-2xs font-semibold text-danger">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                    <span class="material-symbols-outlined icon-16">delete</span>
                     Descarte
                   </span>
                 `;
