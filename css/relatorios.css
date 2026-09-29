@@ -237,3 +237,40 @@
 .pt-md {
   padding-top: var(--space-md);
 }
+
+@media (max-width: 768px) {
+  .tab-nav {
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .tab-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .grouping-pills {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .grouping-pill {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  #btn-clear-filters,
+  #btn-export-csv,
+  #btn-clear-audit-filters {
+    width: 100% !important;
+    align-self: stretch !important;
+  }
+
+  .diff-table {
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+}
