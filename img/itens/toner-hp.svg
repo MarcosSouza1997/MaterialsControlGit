@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Cartucho de toner">
+<rect width="400" height="400" fill="#F4F7F9"/><circle cx="200" cy="200" r="150" fill="#E6EEF3"/> <ellipse cx="200" cy="318" rx="130" ry="14" fill="#003459" opacity="0.12"/>
+<path d="M70 200 L110 150 L320 150 L335 175 L335 290 L70 290 Z" fill="#2B3238"/>
+<path d="M110 150 L320 150 L335 175 L95 175 Z" fill="#4A545C"/>
+<rect x="70" y="175" width="265" height="20" fill="#3A434A"/>
+<rect x="150" y="118" width="110" height="18" rx="9" fill="none" stroke="#4A545C" stroke-width="10"/>
+<rect x="85" y="262" width="235" height="16" rx="4" fill="#1C2227"/>
+<rect x="120" y="205" width="120" height="44" rx="6" fill="#FFFFFF"/>
+<text x="180" y="235" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="700" fill="#003459" text-anchor="middle">85A</text>
+<rect x="255" y="210" width="56" height="34" rx="4" fill="#007EA7"/>
+<circle cx="283" cy="227" r="9" fill="#00A8E8"/>
+</svg>

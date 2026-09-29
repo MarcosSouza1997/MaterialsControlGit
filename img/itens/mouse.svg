@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Mouse USB">
+<rect width="400" height="400" fill="#F4F7F9"/><circle cx="200" cy="200" r="150" fill="#E6EEF3"/> <ellipse cx="200" cy="318" rx="130" ry="14" fill="#003459" opacity="0.12"/>
+<path d="M200 125 C 205 90, 250 90, 250 60 C 250 40, 270 35, 285 45" fill="none" stroke="#3F4E58" stroke-width="6" stroke-linecap="round"/>
+<path d="M200 125 C 140 125, 125 175, 125 215 C 125 275, 160 310, 200 310 C 240 310, 275 275, 275 215 C 275 175, 260 125, 200 125 Z" fill="#FFFFFF" stroke="#003459" stroke-width="3"/>
+<path d="M130 195 C 150 205, 250 205, 270 195" fill="none" stroke="#CBD5DD" stroke-width="3"/>
+<line x1="200" y1="127" x2="200" y2="202" stroke="#CBD5DD" stroke-width="3"/>
+<rect x="191" y="145" width="18" height="36" rx="9" fill="#007EA7"/>
+<path d="M150 260 C 170 290, 230 290, 250 260" fill="none" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round"/>
+</svg>
